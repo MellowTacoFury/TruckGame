@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: efc52c583a9a88542b5f3d2f273e33ab
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 209444
+  packageName: 'PROMETEO: Car Controller'
+  packageVersion: 1.2.2
+  assetPath: Assets/PROMETEO - Car Controller/Prefabs/Prometheus.prefab
+  uploadId: 513063

@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Car
   - Hittable
+  - Ground
+  - Enemy
+  - AudioSources
   layers:
   - Default
   - TransparentFX

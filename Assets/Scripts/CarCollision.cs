@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class CarCollision : MonoBehaviour
 {
+    public int sponserHitMultiplier = 1;
     private Viewers viewers;
     void Start()
     {
@@ -13,13 +14,13 @@ public class CarCollision : MonoBehaviour
         {
             Debug.Log("Hit: " + other.name);
             viewers.DoTrick(
-                other.GetComponent<ItemSOscript>().data.PointsIfHit,
+                other.GetComponent<ItemSOscript>().data.PointsIfHit * sponserHitMultiplier,
                 other.GetComponent<ItemSOscript>().data.TimeToAdd
                 );
             //get the itemso, give the int to the viewers function
         }
             
-        if(other.CompareTag("Car"))
+        if(other.CompareTag("Car") || other.CompareTag("Enemy"))
         {
             Debug.Log("Hit: " + other.name);
             viewers.DoTrick(5,5);

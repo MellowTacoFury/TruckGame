@@ -18,29 +18,32 @@ public class Viewers : MonoBehaviour
 
     private void Update()
     {
-        if(viewerCount <= 0)
+        if(GetComponent<GameDataManager>().currentState == GameDataManager.GameState.Playing)
         {
-            Debug.LogError("Loose");
-        }
-        
-        //---------------
-
-        if(timeSinceLastTrick > 0)
-        {
-            timeSinceLastTrick -= Time.deltaTime;
-            StopCoroutine(LooseViewers());
-            isLoosingViewers = false;
-        }
-        else
-        {
-            //start the courutine
-            if(isLoosingViewers == false)
+            if(viewerCount <= 0 && GetComponent<GameDataManager>().currentState != GameDataManager.GameState.GO)
             {
-                isLoosingViewers = true;
-                StartCoroutine(LooseViewers());
+                Debug.LogError("Loose");
+                GetComponent<GameDataManager>().GameDone();
+            }
+            
+            //---------------
+
+            if(timeSinceLastTrick > 0)
+            {
+                timeSinceLastTrick -= Time.deltaTime;
+                StopCoroutine(LooseViewers());
+                isLoosingViewers = false;
+            }
+            else
+            {
+                //start the courutine
+                if(isLoosingViewers == false)
+                {
+                    isLoosingViewers = true;
+                    StartCoroutine(LooseViewers());
+                }
             }
         }
-
     }
     public void DoTrick(int viewersToAdd, float timeToAdd)
     {

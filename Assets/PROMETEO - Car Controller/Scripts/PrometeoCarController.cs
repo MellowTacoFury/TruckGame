@@ -16,23 +16,23 @@ using UnityEngine.UI;
 
 public class PrometeoCarController : MonoBehaviour
 {
-
     //CAR SETUP
 
       [Space(20)]
       //[Header("CAR SETUP")]
-      [Space(10)]
+      [Space(20)]
+      public bool useAI = false;
       [Range(20, 190)]
-      public int maxSpeed = 90; //The maximum speed that the car can reach in km/h.
+      public int maxSpeed = 140; //The maximum speed that the car can reach in km/h.
       [Range(10, 120)]
-      public int maxReverseSpeed = 45; //The maximum speed that the car can reach while going on reverse in km/h.
+      public int maxReverseSpeed = 65; //The maximum speed that the car can reach while going on reverse in km/h.
       [Range(1, 10)]
-      public int accelerationMultiplier = 2; // How fast the car can accelerate. 1 is a slow acceleration and 10 is the fastest.
+      public int accelerationMultiplier = 5; // How fast the car can accelerate. 1 is a slow acceleration and 10 is the fastest.
       [Space(10)]
       [Range(10, 45)]
-      public int maxSteeringAngle = 27; // The maximum angle that the tires can reach while rotating the steering wheel.
+      public int maxSteeringAngle = 39; // The maximum angle that the tires can reach while rotating the steering wheel.
       [Range(0.1f, 1f)]
-      public float steeringSpeed = 0.5f; // How fast the steering wheel turns.
+      public float steeringSpeed = 0.7f; // How fast the steering wheel turns.
       [Space(10)]
       [Range(100, 600)]
       public int brakeForce = 350; // The strength of the wheel brakes.
@@ -45,7 +45,8 @@ public class PrometeoCarController : MonoBehaviour
                                     // in the points x = 0 and z = 0 of your car. You can select the value that you want in the y axis,
                                     // however, you must notice that the higher this value is, the more unstable the car becomes.
                                     // Usually the y value goes from 0 to 1.5.
-
+      [HideInInspector] public float accelerationInput;
+      [HideInInspector] public float steerInput;
     //WHEELS
 
       //[Header("WHEELS")]
@@ -93,6 +94,7 @@ public class PrometeoCarController : MonoBehaviour
       public bool useUI = false;
       public Text carSpeedText; // Used to store the UI object that is going to show the speed of the car.
 
+
     //SOUNDS
 
       [Space(20)]
@@ -102,7 +104,8 @@ public class PrometeoCarController : MonoBehaviour
       public bool useSounds = false;
       public AudioSource carEngineSound; // This variable stores the sound of the car engine.
       public AudioSource tireScreechSound; // This variable stores the sound of the tire screech (when the car is drifting).
-      float initialCarEngineSoundPitch; // Used to store the initial pitch of the car engine sound.
+      float initialCarEngineSoundPitch; // Used to store the initial pitch of the car engine sound
+
 
     //CONTROLS
 
@@ -327,40 +330,84 @@ public class PrometeoCarController : MonoBehaviour
 
       }else{
 
+    // 🚗 ACCELERATION (AI or Player)
+    if(useAI)
+    {
+        if(accelerationInput > 0)
+        {
+            CancelInvoke("DecelerateCar");
+            deceleratingCar = false;
+            GoForward();
+        }
+        if(accelerationInput < 0)
+        {
+            CancelInvoke("DecelerateCar");
+            deceleratingCar = false;
+            GoReverse();
+        }
+
+        if(steerInput < -0.1f)
+            TurnLeft();
+
+        if(steerInput > 0.1f)
+            TurnRight();
+    }
+    else
+    {
         if(Input.GetKey(KeyCode.W)){
-          CancelInvoke("DecelerateCar");
-          deceleratingCar = false;
-          GoForward();
+            CancelInvoke("DecelerateCar");
+            deceleratingCar = false;
+            GoForward();
         }
         if(Input.GetKey(KeyCode.S)){
-          CancelInvoke("DecelerateCar");
-          deceleratingCar = false;
-          GoReverse();
+            CancelInvoke("DecelerateCar");
+            deceleratingCar = false;
+            GoReverse();
         }
 
         if(Input.GetKey(KeyCode.A)){
-          TurnLeft();
+            TurnLeft();
         }
         if(Input.GetKey(KeyCode.D)){
-          TurnRight();
+            TurnRight();
         }
-        if(Input.GetKey(KeyCode.Space)){
-          CancelInvoke("DecelerateCar");
-          deceleratingCar = false;
-          Handbrake();
+    }
+        if(useAI)
+        {
+        if(Mathf.Abs(accelerationInput) < 0.1f)
+            ThrottleOff();
         }
-        if(Input.GetKeyUp(KeyCode.Space)){
-          RecoverTraction();
-        }
+        else
+        {
         if((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W))){
-          ThrottleOff();
+            ThrottleOff();
         }
+        }
+        if(useAI)
+        {
+        if(Mathf.Abs(accelerationInput) < 0.1f && !deceleratingCar)
+        {
+            InvokeRepeating("DecelerateCar", 0f, 0.1f);
+            deceleratingCar = true;
+        }
+        }
+        else
+        {
         if((!Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)) && !Input.GetKey(KeyCode.Space) && !deceleratingCar){
-          InvokeRepeating("DecelerateCar", 0f, 0.1f);
-          deceleratingCar = true;
+            InvokeRepeating("DecelerateCar", 0f, 0.1f);
+            deceleratingCar = true;
         }
-        if(!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && steeringAxis != 0f){
-          ResetSteeringAngle();
+        }
+        if(useAI)
+        {
+            if(Mathf.Abs(steerInput) < 0.1f && steeringAxis != 0f)
+                ResetSteeringAngle();
+        }
+        else
+        {
+            if(!Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D) && steeringAxis != 0f){
+                ResetSteeringAngle();
+            }
         }
 
       }
@@ -770,10 +817,5 @@ public class PrometeoCarController : MonoBehaviour
         driftingAxis = 0f;
       }
     }
-
-
-    
-
-
 
 }
