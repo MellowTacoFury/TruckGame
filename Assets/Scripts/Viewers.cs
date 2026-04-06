@@ -1,21 +1,25 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class Viewers : MonoBehaviour
 {
     public bool Testing = false;
     public int viewerCount = 50;
     public float timeSinceLastTrick = 5f;
+    public float maxTime = 60;
+    public TextMeshProUGUI viewersText;
+    public TextMeshProUGUI TimeText;
     private bool isLoosingViewers;
     /*
     level timer - gas gage?
-    int for viewer count
-    timer for how long since last cool trick - coutotine to lower it
-    PUBLIC cool trick function - adds viewers, resets cool trick timer
-    if viewer count == 0, loose
-    
     */
-
+    void Start()
+    {
+        viewersText.text = "Viewers: " + viewerCount.ToString();
+        TimeText.text = "Time Until Viewers Get Bored: \n" + timeSinceLastTrick.ToString("F2");
+        timeSinceLastTrick = maxTime/2;
+    }
 
     private void Update()
     {
@@ -36,11 +40,14 @@ public class Viewers : MonoBehaviour
             if(timeSinceLastTrick > 0)
             {
                 timeSinceLastTrick -= Time.deltaTime;
+                TimeText.text = "Time Until Viewers Get Bored: \n" + timeSinceLastTrick.ToString("F2");
                 StopCoroutine(LooseViewers());
                 isLoosingViewers = false;
             }
             else
             {
+                timeSinceLastTrick = 0;
+                TimeText.text = "Time Until Viewers Get Bored: \n" + timeSinceLastTrick.ToString("F2");
                 //start the courutine
                 if(isLoosingViewers == false)
                 {
@@ -53,7 +60,18 @@ public class Viewers : MonoBehaviour
     public void DoTrick(int viewersToAdd, float timeToAdd)
     {
         viewerCount += viewersToAdd;
-        timeSinceLastTrick += timeToAdd;
+        viewersText.text = "Viewers: " + viewerCount.ToString();
+
+        if(timeSinceLastTrick+timeToAdd >= maxTime)
+        {
+            timeSinceLastTrick = maxTime;
+        }
+        else
+        {
+            timeSinceLastTrick += timeToAdd;
+        }
+        TimeText.text = "Time Until Viewers Get Bored: \n" + timeSinceLastTrick.ToString("F2");
+        
     }
     private IEnumerator LooseViewers()
     {
@@ -61,6 +79,7 @@ public class Viewers : MonoBehaviour
         {
             yield return new WaitForSecondsRealtime(1);
             viewerCount -= 1;
+            viewersText.text = "Viewers: " + viewerCount.ToString();
         }
     }
 }
