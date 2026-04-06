@@ -8,14 +8,20 @@ public class Tutorial : MonoBehaviour
     [SerializeField] List<string> tutorialLevelTexts;
     [SerializeField] string buttonText;
     private int tutorialLevel = 0;
+    private bool done = false;
     void Start()
     {
         tutorialLevel = 0;
+        done = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(done == true)
+        {
+            return;
+        }
         if(Input.GetKeyDown(KeyCode.Tab))
         {
             tutorialLevel++;
@@ -28,6 +34,7 @@ public class Tutorial : MonoBehaviour
         if(tutorialLevel == tutorialLevelTexts.Count)
         {
             //end tutorial
+            done = true;
             GameObject.Find("/GameManager").GetComponent<GameDataManager>().StartAfterTutorial();
         }
         else

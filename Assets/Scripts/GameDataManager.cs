@@ -49,8 +49,6 @@ public class GameDataManager : MonoBehaviour
 
 
     //Selection Stuff
-
-
     private void Focus()
     {
         carSelectionUI.SetActive(true);
@@ -161,10 +159,16 @@ public class GameDataManager : MonoBehaviour
                 //set the actual car stuff here
                 //add and remove scripts
                 //set camera
-                //etc
+                //etc 
                 currentSponser.car.tag = "Car";
                 currentSponser.car.gameObject.name = "Player";
                 currentSponser.car.GetComponent<PlayerCarInput>().playing = true;
+
+                Transform nearMissTransform = currentSponser.car.transform.Find("Near Miss Colliders");
+                nearMissTransform.gameObject.SetActive(true);
+
+                currentSponser.car.GetComponent<CarCollision>().nearMiss = nearMissTransform.gameObject.GetComponent<NearMiss>();
+
                 break;
             }
         }

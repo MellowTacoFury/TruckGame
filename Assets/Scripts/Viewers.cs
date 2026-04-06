@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Viewers : MonoBehaviour
 {
+    public bool Testing = false;
     public int viewerCount = 50;
     public float timeSinceLastTrick = 5f;
     private bool isLoosingViewers;
@@ -18,6 +19,10 @@ public class Viewers : MonoBehaviour
 
     private void Update()
     {
+        if(Testing == true)
+        {
+            return;
+        }
         if(GetComponent<GameDataManager>().currentState == GameDataManager.GameState.Playing)
         {
             if(viewerCount <= 0 && GetComponent<GameDataManager>().currentState != GameDataManager.GameState.GO)

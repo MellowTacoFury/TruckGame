@@ -4,6 +4,7 @@ public class CarCollision : MonoBehaviour
 {
     public int sponserHitMultiplier = 1;
     private Viewers viewers;
+    public NearMiss nearMiss;
     void Start()
     {
         viewers = GameObject.Find("GameManager").GetComponent<Viewers>();
@@ -28,5 +29,12 @@ public class CarCollision : MonoBehaviour
             //grab speed. Depending on speed, add some points?
         }
             
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.CompareTag("Car") || collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Hittable"))
+        {
+            nearMiss.somethingHitCar = true;
+        }
     }
 }
