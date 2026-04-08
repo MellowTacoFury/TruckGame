@@ -36,14 +36,13 @@ public class Settings : MonoBehaviour
             audio.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("Volume");
         }
         volume.value = PlayerPrefs.GetFloat("Volume");
-        
 
 
     }
     public void StartZoom()
     {
         //By itself, beacause the camera component is off at start
-        //10 - 30ish, 25
+        //15 - 60ish, 25
         if(PlayerPrefs.GetFloat("Zoom", -1) == -1)
         {
             PlayerPrefs.SetFloat("Zoom", 25);

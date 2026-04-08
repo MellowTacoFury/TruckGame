@@ -313,7 +313,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Wreck-Royale
+  m_text: Revvin' Retention
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1057,7 +1057,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &650554955
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1297,7 +1297,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -160}
-  m_SizeDelta: {x: 1126.7188, y: 362.1409}
+  m_SizeDelta: {x: 1577.5273, y: 362.1409}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1275315981
 MonoBehaviour:
@@ -1520,6 +1520,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
   settingsPanel: {fileID: 1240521825}
   creditsPanel: {fileID: 650554954}
+  settings: {fileID: 1910737757}
 --- !u!1 &1530746020
 GameObject:
   m_ObjectHideFlags: 0
@@ -1881,19 +1882,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 476371277310971050, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 476371277310971050, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1047440689325336798, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1440334997079875270, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
       propertyPath: m_Name
       value: SettingsHolder
+      objectReference: {fileID: 0}
+    - target: {fileID: 1440334997079875270, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2256996074430938328, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1905,11 +1910,11 @@ PrefabInstance:
       objectReference: {fileID: 359932284}
     - target: {fileID: 5049028664410826711, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5696373751209344502, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7623342097112281150, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
       propertyPath: m_Pivot.x
@@ -1991,13 +1996,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7882765952180965644, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8204048040736617319, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8212136437129856850, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8479014489112973345, guid: 85fc6993597b5ed429f04ee1ba0bfd7b, type: 3}
       propertyPath: m_IsOn
@@ -2070,7 +2079,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5591325585506251493, guid: d7f1507744a546d4789f2e8c43fc0089, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
-      value: Demo
+      value: MainScene
       objectReference: {fileID: 0}
     - target: {fileID: 5591325585506251493, guid: d7f1507744a546d4789f2e8c43fc0089, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName

@@ -48,11 +48,13 @@ public class AICarController : MonoBehaviour
 
     void Update()
     {
-        if(!playing)
+        if(playing == false)
         {
             return;
         }
-        if (player == null) return;
+        else
+        {
+            if (player == null) return;
 
         // 🚧 STUCK DETECTION (SMART)
         float speed = rb.linearVelocity.magnitude;
@@ -91,6 +93,8 @@ public class AICarController : MonoBehaviour
             Chase();
         else
             Wander();
+        }
+        
     }
 
     // 👀 PLAYER DETECTION

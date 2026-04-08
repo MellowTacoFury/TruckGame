@@ -19,7 +19,6 @@ public class AirAndDriftTimer : MonoBehaviour
     {
         if(other.CompareTag("Ground"))
         {
-            Debug.Log("Left ground");
             isInAir = true;
         }
     }
@@ -36,7 +35,6 @@ public class AirAndDriftTimer : MonoBehaviour
             {
                 isInAir = false;
                 DoAirTrick();
-                Debug.Log("Hit ground");
             }
                 
         }
@@ -63,7 +61,7 @@ public class AirAndDriftTimer : MonoBehaviour
         if(timer != 0)
         {
             isInAir = false;
-            int amount = (int)timer*2;
+            int amount = (int)Mathf.Ceil(timer)*2;
             Debug.Log("Air time: " + timer + ", amount: " + amount);
             viewers.DoTrick(amount*sponserAirMultiplier, amount);
             timer = 0;
@@ -74,7 +72,6 @@ public class AirAndDriftTimer : MonoBehaviour
     {
         if(driftTime != 0)
         {
-            Debug.Log("Max drift time: " + (int)driftTime);
             viewers.DoTrick((int)Mathf.Ceil(driftTime) * sponserDriftMultiplier, (int)driftTime);
             driftTime = 0;
         }

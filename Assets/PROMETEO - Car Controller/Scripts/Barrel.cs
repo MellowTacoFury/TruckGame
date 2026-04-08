@@ -1,0 +1,67 @@
+using UnityEngine;
+
+public class ExplosiveBarrel : MonoBehaviour
+{
+    public float explosionRadius = 5f;
+    public float explosionPower = 10f;
+    public float upwardsModifier = 3f;
+    public GameObject explosionEffect; // Prefab for explosion VFX
+    public GameObject barrelMesh;
+    public float destroyDelay = .001f;
+
+
+    public int barrelHealth = 6;
+
+    private bool isExploded = false;
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (isExploded) return;
+
+        // Trigger explosion on collision
+        if (collision.collider.CompareTag("Car"))
+        {
+            barrelHealth = 0;
+            Explode();
+        }
+        else if (collision.collider)
+        {
+            if(barrelHealth <= 0)
+            {
+                Explode();
+            }
+            else
+            {
+                barrelHealth -= 1;
+            }
+            
+        }
+        
+    }
+
+    private void Explode()
+    {
+        isExploded = true;
+
+        // Apply explosion force to nearby rigidbodies
+        Collider[] colliders = Physics.OverlapSphere(transform.position, explosionRadius);
+        foreach (Collider hit in colliders)
+        {
+            if (hit.attachedRigidbody != null)
+            {
+                hit.attachedRigidbody.AddExplosionForce(explosionPower, transform.position, explosionRadius, upwardsModifier, ForceMode.Impulse);
+                explosionEffect.SetActive(true);
+                explosionEffect.GetComponent<ParticleSystem>().Play();
+                barrelMesh.SetActive(false);
+            }
+        }
+
+        if(isExploded)
+        {
+            GetComponent<Rigidbody>().isKinematic = true;   
+        }
+
+        // Destroy the barrel after a delay
+        Destroy(gameObject, destroyDelay);
+    }
+}   

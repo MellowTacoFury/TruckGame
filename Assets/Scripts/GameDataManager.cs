@@ -113,6 +113,7 @@ public class GameDataManager : MonoBehaviour
 
     public void StartGame()
     {
+        Debug.Log("Here");
         //false, no tutorial
         if(doingTutorial == false)
         {
@@ -133,6 +134,14 @@ public class GameDataManager : MonoBehaviour
         sponsers[currentFocusCar].camera.SetActive(false);
         settingsHolder.GetComponentInParent<Settings>().StartZoom();
         normalCamera.GetComponent<CameraFollow>().StartCamera();
+        ApplyMultipliers();
+
+        //turn on mortars
+        GameObject[] mortars = GameObject.FindGameObjectsWithTag("Mortar");
+        foreach (var gun in mortars)
+        {
+            gun.GetComponent<Mortar>().playing = true;
+        }
         
     }
     public void StartAfterTutorial()
@@ -141,7 +150,6 @@ public class GameDataManager : MonoBehaviour
         currentState = GameState.Playing;
         hudUI.SetActive(true);
         tutorialHolder.SetActive(false);
-        ApplyMultipliers();
     }
 
     //Sponser stuff
@@ -157,6 +165,7 @@ public class GameDataManager : MonoBehaviour
                 if(currentSponser.car.GetComponent<AirAndDriftTimer>() == null)currentSponser.car.AddComponent<AirAndDriftTimer>();
                 if(currentSponser.car.GetComponent<AICarController>())Destroy(currentSponser.car.GetComponent<AICarController>());
                 Camera.main.gameObject.GetComponent<CameraFollow>().carTransform = currentSponser.car.transform;
+                currentSponser.car.GetComponent<PrometeoCarController>().enabled = true;
                 //set the actual car stuff here
                 //add and remove scripts
                 //set camera
@@ -184,6 +193,8 @@ public class GameDataManager : MonoBehaviour
                 sponser.car.GetComponent<AICarController>().player = GameObject.FindGameObjectWithTag("Car").gameObject.transform;
                 sponser.car.GetComponent<AICarController>().StartMatch();
                 sponser.car.GetComponent<AICarController>().playing = true;
+                sponser.car.GetComponent<PrometeoCarController>().enabled = true;
+                sponser.car.GetComponent<CarCollision>().enabled = false;
                 sponser.car.gameObject.name = "Enemy";
                 sponser.car.tag = "Enemy";
             }

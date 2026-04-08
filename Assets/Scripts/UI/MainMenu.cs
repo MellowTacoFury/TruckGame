@@ -6,6 +6,7 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] GameObject settingsPanel;
     [SerializeField] GameObject creditsPanel;
+    [SerializeField] Settings settings;
 
 
     void Start()
@@ -13,6 +14,7 @@ public class MainMenu : MonoBehaviour
         Time.timeScale = 1;
         settingsPanel.SetActive(false);
         creditsPanel.SetActive(false);
+        settings.StartZoom();
     }
 
     public void OpenSettings()

@@ -1,13 +1,13 @@
 using UnityEngine;
 
-public class ExplosiveBarrel : MonoBehaviour
+public class Barrel : MonoBehaviour
 {
-    public float explosionRadius = 5f;
-    public float explosionPower = 10f;
-    public float upwardsModifier = 3f;
+    public float explosionRadius = 0f;
+    public float explosionPower = 0f;
+    public float upwardsModifier = 0f;
     public GameObject explosionEffect; // Prefab for explosion VFX
     public GameObject barrelMesh;
-    public float destroyDelay = .001f;
+    public float destroyDelay = .5f;
 
 
     public int barrelHealth = 6;

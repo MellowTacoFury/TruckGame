@@ -910,6 +910,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3795669695505257912, guid: 50b688f22cc3da84ebf46d49709152dc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 360119480}
+    - targetCorrespondingSourceObject: {fileID: 3795669695505257912, guid: 50b688f22cc3da84ebf46d49709152dc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 360119489}
   m_SourcePrefab: {fileID: 100100000, guid: 50b688f22cc3da84ebf46d49709152dc, type: 3}
 --- !u!1 &360119479 stripped
 GameObject:
@@ -963,6 +966,20 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7331703913953737852, guid: 50b688f22cc3da84ebf46d49709152dc, type: 3}
   m_PrefabInstance: {fileID: 360119478}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &360119489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 360119479}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b9c8746782b7a3449b24cc0dec74507, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarCollision
+  sponserHitMultiplier: 1
+  nearMiss: {fileID: 1446842254}
 --- !u!1 &402657121
 GameObject:
   m_ObjectHideFlags: 0
@@ -1187,7 +1204,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &439278466
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2528,6 +2545,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3795669695505257912, guid: 50b688f22cc3da84ebf46d49709152dc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 791971707}
+    - targetCorrespondingSourceObject: {fileID: 3795669695505257912, guid: 50b688f22cc3da84ebf46d49709152dc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 791971711}
   m_SourcePrefab: {fileID: 100100000, guid: 50b688f22cc3da84ebf46d49709152dc, type: 3}
 --- !u!1 &791971701 stripped
 GameObject:
@@ -2581,6 +2601,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.75453186, z: 1}
   m_Center: {x: 0, y: 0.12273407, z: 0}
+--- !u!114 &791971711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 791971701}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b9c8746782b7a3449b24cc0dec74507, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarCollision
+  sponserHitMultiplier: 1
+  nearMiss: {fileID: 749933891}
 --- !u!1 &813453639
 GameObject:
   m_ObjectHideFlags: 0
@@ -4866,6 +4900,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3795669695505257912, guid: 50b688f22cc3da84ebf46d49709152dc, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1847460696}
+    - targetCorrespondingSourceObject: {fileID: 3795669695505257912, guid: 50b688f22cc3da84ebf46d49709152dc, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1847460700}
   m_SourcePrefab: {fileID: 100100000, guid: 50b688f22cc3da84ebf46d49709152dc, type: 3}
 --- !u!1 &1847460690 stripped
 GameObject:
@@ -4919,6 +4956,20 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 0.75453186, z: 1}
   m_Center: {x: 0, y: 0.12273407, z: 0}
+--- !u!114 &1847460700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847460690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b9c8746782b7a3449b24cc0dec74507, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarCollision
+  sponserHitMultiplier: 1
+  nearMiss: {fileID: 1507970553}
 --- !u!1 &1945789789
 GameObject:
   m_ObjectHideFlags: 0
@@ -4958,6 +5009,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 627556911, guid: 606e61f6c32aab047a6a80bfb66a06d8, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 261786959625234688, guid: 606e61f6c32aab047a6a80bfb66a06d8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -68.10808
@@ -5004,6 +5059,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -2412226525719738638, guid: 606e61f6c32aab047a6a80bfb66a06d8, type: 3}
+    - {fileID: 6535472299609793006, guid: 606e61f6c32aab047a6a80bfb66a06d8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 261786959625234688, guid: 606e61f6c32aab047a6a80bfb66a06d8, type: 3}
@@ -5089,7 +5145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarCollision
   sponserHitMultiplier: 1
-  nearMiss: {fileID: 0}
+  nearMiss: {fileID: 1062684155}
 --- !u!4 &1967322052 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 261786959625234688, guid: 606e61f6c32aab047a6a80bfb66a06d8, type: 3}

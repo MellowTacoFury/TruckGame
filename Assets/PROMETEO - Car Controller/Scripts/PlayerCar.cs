@@ -13,12 +13,16 @@ public class PlayerCarInput : MonoBehaviour
 
     void Update()
     {
-        if(!playing)
+        if(playing == false)
         {
             return;
         }
-        car.accelerationInput = Input.GetAxis("Vertical");
-        car.steerInput = Input.GetAxis("Horizontal");
+        else
+        {
+            car.accelerationInput = Input.GetAxis("Vertical");
+            car.steerInput = Input.GetAxis("Horizontal");
+        }
+        
     }
 
     // 💥 RAM FORCE
