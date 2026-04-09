@@ -31,11 +31,11 @@ public class Settings : MonoBehaviour
         {
             PlayerPrefs.SetFloat("Volume", 1);
         }
-        foreach (var audio in GameObject.FindGameObjectsWithTag("AudioSources"))
-        {
-            audio.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("Volume");
-        }
-        volume.value = PlayerPrefs.GetFloat("Volume");
+        // foreach (var audio in GameObject.FindGameObjectsWithTag("AudioSources"))
+        // {
+        //     audio.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("Volume");
+        // }
+        // volume.value = PlayerPrefs.GetFloat("Volume");
 
 
     }

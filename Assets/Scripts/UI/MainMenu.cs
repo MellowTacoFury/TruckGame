@@ -1,17 +1,22 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using FMODUnity;
 
+[RequireComponent(typeof(StudioEventEmitter))]
 public class MainMenu : MonoBehaviour
 {
 
     [SerializeField] GameObject settingsPanel;
     [SerializeField] GameObject creditsPanel;
     [SerializeField] Settings settings;
+    private StudioEventEmitter emitter;
 
 
     void Start()
     {
         Time.timeScale = 1;
+        emitter = AudioManager.instance.InitializeEventEmitter(FMODEvents.instance.backgroundMusic, this.gameObject);
+        emitter.Play();
         settingsPanel.SetActive(false);
         creditsPanel.SetActive(false);
         settings.StartZoom();
@@ -39,6 +44,7 @@ public class MainMenu : MonoBehaviour
     }
     public void Quit()
     {
+        emitter.Stop();
         Application.Quit();
     }
 
