@@ -6,7 +6,9 @@ public class Settings : MonoBehaviour
 {
     [SerializeField] Image dimmer;
     [SerializeField] Slider brightness;
-    [SerializeField] Slider volume;
+    [SerializeField] Slider volumeMaster;
+    [SerializeField] Slider volumeMusic;
+    [SerializeField] Slider volumeSFX;
     [SerializeField] Slider zoom;
     [SerializeField] Toggle tutorialToggle;
 
@@ -27,15 +29,7 @@ public class Settings : MonoBehaviour
         dimmer.color = new Color(dimmer.color.r, dimmer.color.g, dimmer.color.b, PlayerPrefs.GetFloat("Brightness"));
         brightness.value = PlayerPrefs.GetFloat("Brightness");
         //------------------------------------------------------
-        if(PlayerPrefs.GetFloat("Volume", -1) == -1)
-        {
-            PlayerPrefs.SetFloat("Volume", 1);
-        }
-        // foreach (var audio in GameObject.FindGameObjectsWithTag("AudioSources"))
-        // {
-        //     audio.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("Volume");
-        // }
-        // volume.value = PlayerPrefs.GetFloat("Volume");
+        SetVolume();
 
 
     }
@@ -56,14 +50,45 @@ public class Settings : MonoBehaviour
         dimmer.color = new Color(dimmer.color.r, dimmer.color.g, dimmer.color.b, brightness.value);
         PlayerPrefs.SetFloat("Brightness", brightness.value);
     }
-    public void ChangeVolume()
+    private void SetVolume()
     {
-        foreach (var audio in GameObject.FindGameObjectsWithTag("AudioSources"))
+        //sliders and save
+        if(PlayerPrefs.GetFloat("MasterV", -1) == -1)
         {
-            audio.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("Volume");
+            PlayerPrefs.SetFloat("MasterV", 1);
         }
-        PlayerPrefs.SetFloat("Volume", volume.value);
+        volumeMaster.value = PlayerPrefs.GetFloat("MasterV");
+        if(PlayerPrefs.GetFloat("MusicV", -1) == -1)
+        {
+            PlayerPrefs.SetFloat("MusicV", 1);
+        }
+        volumeMusic.value = PlayerPrefs.GetFloat("MusicV");
+        if(PlayerPrefs.GetFloat("SFXV", -1) == -1)
+        {
+            PlayerPrefs.SetFloat("SFXV", 1);
+        }
+        volumeSFX.value = PlayerPrefs.GetFloat("SFXV");
+
+        //acutal volumes
+        AudioManager.instance.UpdateBusses(volumeMaster.value, volumeMusic.value, volumeSFX.value);
+
     }
+    public void ChangeMasterVolume()
+    {
+        AudioManager.instance.UpdateMasterBus(volumeMaster.value);
+        PlayerPrefs.SetFloat("MasterV", volumeMaster.value);
+    }
+    public void ChangeMusicVolume()
+    {
+        AudioManager.instance.UpdateMusicBus(volumeMusic.value);
+        PlayerPrefs.SetFloat("MusicV", volumeMusic.value);
+    }
+    public void ChangeSFXVolume()
+    {
+        AudioManager.instance.UpdateSFXBus(volumeSFX.value);
+        PlayerPrefs.SetFloat("SFXV", volumeSFX.value);
+    }
+
     public void ChangeZoom()
     {
         Camera.main.GetComponent<Camera>().fieldOfView = zoom.value;

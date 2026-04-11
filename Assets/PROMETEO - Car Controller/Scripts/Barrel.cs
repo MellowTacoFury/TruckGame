@@ -1,5 +1,6 @@
 using UnityEngine;
-
+using FMODUnity;
+[RequireComponent(typeof(StudioEventEmitter))]
 public class ExplosiveBarrel : MonoBehaviour
 {
     public float explosionRadius = 5f;
@@ -13,6 +14,12 @@ public class ExplosiveBarrel : MonoBehaviour
     public int barrelHealth = 6;
 
     private bool isExploded = false;
+    private StudioEventEmitter emitter;
+    void Start()
+    {
+        emitter = AudioManager.instance.InitializeEventEmitter(FMODEvents.instance.barrelExplosion, this.gameObject);
+        emitter.Stop();
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -52,6 +59,7 @@ public class ExplosiveBarrel : MonoBehaviour
                 hit.attachedRigidbody.AddExplosionForce(explosionPower, transform.position, explosionRadius, upwardsModifier, ForceMode.Impulse);
                 explosionEffect.SetActive(true);
                 explosionEffect.GetComponent<ParticleSystem>().Play();
+                emitter.Play();
                 barrelMesh.SetActive(false);
             }
         }

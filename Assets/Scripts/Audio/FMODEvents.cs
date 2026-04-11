@@ -9,6 +9,9 @@ public class FMODEvents : MonoBehaviour
     [field: SerializeField] public EventReference backgroundMusic { get; private set; }
     [field: SerializeField] public EventReference carCrash { get; private set; }
     [field: SerializeField] public EventReference buttonClick { get; private set; }
+    [field: SerializeField] public EventReference horns { get; private set; }
+    [field: SerializeField] public EventReference drifting { get; private set; }
+    [field: SerializeField] public EventReference driving { get; private set; }
 
     public static FMODEvents instance { get; private set; }
 

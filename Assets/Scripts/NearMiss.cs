@@ -15,11 +15,11 @@ public class NearMiss : MonoBehaviour
     {
         if(somethingHitCar == true)
         {
-            Debug.Log("HIT");
+            // Debug.Log("HIT");
         }
         else
         {
-            Debug.Log("MISS!!!!!");
+            // Debug.Log("MISS!!!!!");
             GameObject.Find("GameManager").GetComponent<Viewers>().DoTrick(5, 15);
         }
         somethingHitCar = false;

@@ -869,6 +869,27 @@ MonoBehaviour:
       Data3: -2091678032
       Data4: -934028260
     Path: event:/ButtonClick
+  <horns>k__BackingField:
+    Guid:
+      Data1: 1912203719
+      Data2: 1288224884
+      Data3: -1331369047
+      Data4: 1092935997
+    Path: event:/BackGround Horns
+  <drifting>k__BackingField:
+    Guid:
+      Data1: -198237909
+      Data2: 1101423610
+      Data3: -1753386112
+      Data4: -1417092475
+    Path: event:/Drifting
+  <driving>k__BackingField:
+    Guid:
+      Data1: -1554225530
+      Data2: 1325659764
+      Data3: 413510578
+      Data4: 2097337853
+    Path: event:/Driving
 --- !u!4 &513789568
 Transform:
   m_ObjectHideFlags: 0
@@ -1364,9 +1385,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c808b19012ced44428c4b3626707e47a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
-  masterVolume: 1
-  musicVolume: 1
-  SFXVolume: 1
 --- !u!4 &784297247
 Transform:
   m_ObjectHideFlags: 0

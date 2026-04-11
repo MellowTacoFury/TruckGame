@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
-using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using FMODUnity;
+using System.Collections;
 
-
+[RequireComponent(typeof(StudioEventEmitter))]
 public class GameDataManager : MonoBehaviour
 {
     public enum GameState
@@ -29,6 +29,8 @@ public class GameDataManager : MonoBehaviour
     public GameObject gameOverWindow;
     public GameObject tutorialHolder;
     private bool doingTutorial = false;
+    private StudioEventEmitter emitter;
+    private int howOften = 10;
     //choose sponser
 
     void Awake()
@@ -113,7 +115,6 @@ public class GameDataManager : MonoBehaviour
 
     public void StartGame()
     {
-        Debug.Log("Here");
         //false, no tutorial
         if(doingTutorial == false)
         {
@@ -143,6 +144,9 @@ public class GameDataManager : MonoBehaviour
             gun.GetComponent<Mortar>().playing = true;
         }
         
+        emitter = AudioManager.instance.InitializeEventEmitter(FMODEvents.instance.horns, gameObject);
+        emitter.Stop();
+        StartCoroutine(Honk());
     }
     public void StartAfterTutorial()
     {
@@ -280,6 +284,14 @@ public class GameDataManager : MonoBehaviour
             PlayerPrefs.SetInt("Tutorial", 0);
         }
     }
+
+    private IEnumerator Honk()
+    {
+        yield return new WaitForSeconds(UnityEngine.Random.Range(3, howOften));
+        emitter.Play();
+        StartCoroutine(Honk());
+    }
+
 
 }
 

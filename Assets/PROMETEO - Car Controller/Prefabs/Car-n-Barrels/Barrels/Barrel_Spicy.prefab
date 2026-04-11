@@ -12,9 +12,11 @@ GameObject:
   - component: {fileID: 4019016412382133775}
   - component: {fileID: 6358576212030666439}
   - component: {fileID: 8481194234859359044}
+  - component: {fileID: 7700163839749016298}
+  - component: {fileID: -4620361977470226867}
   m_Layer: 0
   m_Name: Barrel_Spicy
-  m_TagString: Untagged
+  m_TagString: Hittable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,6 +107,50 @@ MonoBehaviour:
   barrelMesh: {fileID: 2685705926538227520}
   destroyDelay: 0.5
   barrelHealth: 3
+--- !u!114 &7700163839749016298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4995220926179038464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
+--- !u!114 &-4620361977470226867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4995220926179038464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1be371a5a687cd74bba14835aba7a122, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ItemSOscript
+  data: {fileID: 11400000, guid: deac196c45b8225488cfd03e2d5bceb6, type: 2}
 --- !u!1001 &7646458616229622688
 PrefabInstance:
   m_ObjectHideFlags: 0

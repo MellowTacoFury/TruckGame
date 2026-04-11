@@ -44,10 +44,13 @@ public class AirAndDriftTimer : MonoBehaviour
         if(car.isDrifting == true)
         {
             driftTime += Time.deltaTime;
+            if(GetComponent<GetCarEmitter>().driftEmitter.IsPlaying() == false)
+                GetComponent<GetCarEmitter>().driftEmitter.Play();
         }
         else
         {
             DoDrift();
+            GetComponent<GetCarEmitter>().driftEmitter.Stop();
         }
 
 
@@ -62,7 +65,6 @@ public class AirAndDriftTimer : MonoBehaviour
         {
             isInAir = false;
             int amount = (int)Mathf.Ceil(timer)*2;
-            Debug.Log("Air time: " + timer + ", amount: " + amount);
             viewers.DoTrick(amount*sponserAirMultiplier, amount);
             timer = 0;
         }

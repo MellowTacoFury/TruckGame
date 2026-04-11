@@ -1,5 +1,7 @@
 using UnityEngine;
+using FMODUnity;
 
+[RequireComponent(typeof(StudioEventEmitter))]
 public class CarCollision : MonoBehaviour
 {
     public int sponserHitMultiplier = 1;
@@ -8,12 +10,12 @@ public class CarCollision : MonoBehaviour
     void Start()
     {
         viewers = GameObject.Find("GameManager").GetComponent<Viewers>();
+        GetComponent<GetCarEmitter>().crashEmitter.Stop();
     }
     void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Hittable"))
         {
-            Debug.Log("Hit: " + other.name);
             viewers.DoTrick(
                 other.GetComponent<ItemSOscript>().data.PointsIfHit * sponserHitMultiplier,
                 other.GetComponent<ItemSOscript>().data.TimeToAdd
@@ -23,7 +25,6 @@ public class CarCollision : MonoBehaviour
             
         if(other.CompareTag("Car") || other.CompareTag("Enemy"))
         {
-            Debug.Log("Hit: " + other.name);
             viewers.DoTrick(5,5);
             //if hittable - objects and cars, not ground
             //grab speed. Depending on speed, add some points?
@@ -35,6 +36,7 @@ public class CarCollision : MonoBehaviour
         if(collision.gameObject.CompareTag("Car") || collision.gameObject.CompareTag("Enemy") || collision.gameObject.CompareTag("Hittable"))
         {
             nearMiss.somethingHitCar = true;
+            GetComponent<GetCarEmitter>().crashEmitter.Play();
         }
     }
 }

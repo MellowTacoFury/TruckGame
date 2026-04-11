@@ -21,6 +21,16 @@ public class PlayerCarInput : MonoBehaviour
         {
             car.accelerationInput = Input.GetAxis("Vertical");
             car.steerInput = Input.GetAxis("Horizontal");
+            if(car.accelerationInput <= 0)
+            {
+                GetComponent<GetCarEmitter>().driveEmitter.Stop();
+            }
+            if(car.accelerationInput > 0 && 
+            GetComponent<GetCarEmitter>().driveEmitter.IsPlaying() == false)
+            {
+                GetComponent<GetCarEmitter>().driveEmitter.Play();
+            }
+            
         }
         
     }

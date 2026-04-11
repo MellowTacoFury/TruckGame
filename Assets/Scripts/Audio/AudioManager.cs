@@ -6,14 +6,6 @@ using FMOD.Studio;
 
 public class AudioManager : MonoBehaviour
 {
-    [Header("Volume")]
-    [Range(0, 1)]
-    public float masterVolume = 1;
-    [Range(0, 1)]
-    public float musicVolume = 1;
-    [Range(0, 1)]
-    public float SFXVolume = 1;
-
     private Bus masterBus;
     private Bus musicBus;
     private Bus sfxBus;
@@ -35,20 +27,30 @@ public class AudioManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         eventInstances = new List<EventInstance>();
         eventEmitters = new List<StudioEventEmitter>();
-
-        Debug.Log(FMODUnity.RuntimeManager.HasBankLoaded("Music"));
-        Debug.Log(FMODUnity.RuntimeManager.HasBankLoaded("SFX"));
         
         masterBus = RuntimeManager.GetBus("bus:/");
         musicBus = RuntimeManager.GetBus("bus:/Music");
         sfxBus = RuntimeManager.GetBus("bus:/SFX");
     }
-    private void UpdateBusses()
+    public void UpdateBusses(float master, float music, float sfx)
     {
-        masterBus.setVolume(masterVolume);
-        musicBus.setVolume(musicVolume);
-        sfxBus.setVolume(SFXVolume);
+        masterBus.setVolume(master);
+        musicBus.setVolume(music);
+        sfxBus.setVolume(sfx);
     }
+    public void UpdateMasterBus(float master)
+    {
+        masterBus.setVolume(master);
+    }
+    public void UpdateMusicBus(float music)
+    {
+        musicBus.setVolume(music);
+    }
+    public void UpdateSFXBus(float sfx)
+    {
+        sfxBus.setVolume(sfx);
+    }
+
     public StudioEventEmitter InitializeEventEmitter(EventReference eventReference, GameObject emitterGameObject)
     {
         StudioEventEmitter emitter = emitterGameObject.GetComponent<StudioEventEmitter>();

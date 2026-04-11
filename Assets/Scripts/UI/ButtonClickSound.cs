@@ -22,8 +22,7 @@ public class ButtonClickSound : MonoBehaviour
 
         emitter = AudioManager.instance.InitializeEventEmitter(FMODEvents.instance.buttonClick, gameObject);
 
-        if (emitter != null)
-            emitter.Stop();
+        emitter.Stop();
     }
 
     public void Click()
