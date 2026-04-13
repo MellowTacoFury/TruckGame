@@ -7,6 +7,9 @@ public class CarCollision : MonoBehaviour
     public int sponserHitMultiplier = 1;
     private Viewers viewers;
     public NearMiss nearMiss;
+    public AirTest airTest;
+    public GameObject UIPopup;
+    private bool hitInThisInstance;
     void Start()
     {
         viewers = GameObject.Find("GameManager").GetComponent<Viewers>();
@@ -14,18 +17,24 @@ public class CarCollision : MonoBehaviour
     }
     void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Hittable"))
+        if(other.CompareTag("Hittable") && hitInThisInstance == false)
         {
+            hitInThisInstance = true;
             viewers.DoTrick(
                 other.GetComponent<ItemSOscript>().data.PointsIfHit * sponserHitMultiplier,
                 other.GetComponent<ItemSOscript>().data.TimeToAdd
                 );
+            var g = Instantiate(UIPopup, transform.position + Vector3.up, Quaternion.identity);
+            g.GetComponent<UIPopup>().DoText(other.GetComponent<ItemSOscript>().data.PointsIfHit * sponserHitMultiplier);
             //get the itemso, give the int to the viewers function
         }
             
-        if(other.CompareTag("Car") || other.CompareTag("Enemy"))
+        if(other.CompareTag("Car") || other.CompareTag("Enemy") && hitInThisInstance == false)
         {
+            hitInThisInstance = true;
             viewers.DoTrick(5,5);
+            var g = Instantiate(UIPopup, transform.position + Vector3.up, Quaternion.identity);
+            g.GetComponent<UIPopup>().DoText(5);
             //if hittable - objects and cars, not ground
             //grab speed. Depending on speed, add some points?
         }
@@ -37,6 +46,13 @@ public class CarCollision : MonoBehaviour
         {
             nearMiss.somethingHitCar = true;
             GetComponent<GetCarEmitter>().crashEmitter.Play();
+        }
+    }
+    void OnTriggerExit(Collider other)
+    {
+        if(other.CompareTag("Hittable") || other.CompareTag("Car") || other.CompareTag("Enemy"))
+        {
+            hitInThisInstance = false;
         }
     }
 }

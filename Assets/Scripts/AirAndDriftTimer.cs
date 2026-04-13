@@ -3,42 +3,35 @@ using UnityEngine;
 public class AirAndDriftTimer : MonoBehaviour
 {
     public int sponserDriftMultiplier = 1;
-    public int sponserAirMultiplier = 1;
-    private bool initialGround = true;
-    private float timer = 0;
-    private bool isInAir = false;
+    // public int sponserAirMultiplier = 1;
+    // [SerializeField] private float timer = 0;
+    // [SerializeField] private bool isInAir = false;
     private PrometeoCarController car;
     private float driftTime = 0;
     private Viewers viewers;
+    public GameObject UIPopup;
     void Start()
     {
         car = GameObject.Find("GameManager").GetComponent<GameDataManager>().currentSponser.car.GetComponent<PrometeoCarController>();
         viewers = GameObject.Find("GameManager").GetComponent<Viewers>();
     }
-    void OnTriggerExit(Collider other)
-    {
-        if(other.CompareTag("Ground"))
-        {
-            isInAir = true;
-        }
-    }
-    void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("Ground"))
-        {
-            if(initialGround == true)
-            {
-                initialGround = false;
+    // void OnTriggerExit(Collider other)
+    // {
+    //     if(other.CompareTag("Ground"))
+    //     {
+    //         isInAir = true;
+    //     }
+    // }
+    // void OnTriggerEnter(Collider other)
+    // {
+    //     if(other.CompareTag("Ground"))
+    //     {
+            
+    //         isInAir = false;
+    //         DoAirTrick();
                 
-            }
-            else
-            {
-                isInAir = false;
-                DoAirTrick();
-            }
-                
-        }
-    }
+    //     }
+    // }
     void Update()
     {
         if(car.isDrifting == true)
@@ -54,27 +47,35 @@ public class AirAndDriftTimer : MonoBehaviour
         }
 
 
-        if(isInAir == true)
-        {
-            timer += Time.deltaTime;
-        }
+        // if(isInAir == true)
+        // {
+        //     timer += Time.deltaTime;
+        // }
     }
-    private void DoAirTrick()
-    {
-        if(timer != 0)
-        {
-            isInAir = false;
-            int amount = (int)Mathf.Ceil(timer)*2;
-            viewers.DoTrick(amount*sponserAirMultiplier, amount);
-            timer = 0;
-        }
+    // private void DoAirTrick()
+    // {
+    //     if(timer > 1)
+    //     {
+    //         isInAir = false;
+    //         int amount = (int)Mathf.Ceil(timer);
+    //         viewers.DoTrick(amount*sponserAirMultiplier, amount);
+    //         Debug.Log($"Air {amount*sponserAirMultiplier}");
+    //         timer = 0;
+    //         var g = Instantiate(UIPopup, transform.position + Vector3.up, Quaternion.identity);
+    //         g.GetComponent<UIPopup>().DoText(amount*sponserAirMultiplier);
+    //     }
         
-    }
+    // }
     private void DoDrift()
     {
         if(driftTime != 0)
         {
             viewers.DoTrick((int)Mathf.Ceil(driftTime) * sponserDriftMultiplier, (int)driftTime);
+           
+            var g = Instantiate(UIPopup, transform.position + Vector3.up, Quaternion.identity);
+            g.GetComponent<UIPopup>().DoText((int)Mathf.Ceil(driftTime)*sponserDriftMultiplier);
+            
+            
             driftTime = 0;
         }
         

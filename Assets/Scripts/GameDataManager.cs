@@ -10,7 +10,7 @@ public class GameDataManager : MonoBehaviour
 {
     public enum GameState
     {
-        None, Selecting, Playing, GO, Tutorial
+        None, Selecting, Playing, GO, Tutorial, ScoreBoard
     }
     public GameState currentState;
     private bool gamePaused = false;
@@ -28,6 +28,9 @@ public class GameDataManager : MonoBehaviour
     public GameObject pauseWindow;
     public GameObject gameOverWindow;
     public GameObject tutorialHolder;
+    public GameObject leaderBoardHolder;
+    public LeaderboardManager leaderBoardManager;
+    public GameObject worldSpacePopup;
     private bool doingTutorial = false;
     private StudioEventEmitter emitter;
     private int howOften = 10;
@@ -180,8 +183,16 @@ public class GameDataManager : MonoBehaviour
 
                 Transform nearMissTransform = currentSponser.car.transform.Find("Near Miss Colliders");
                 nearMissTransform.gameObject.SetActive(true);
+                Transform airColliderTransform = currentSponser.car.transform.Find("AirCollider");
+                airColliderTransform.gameObject.SetActive(true);
+
+                currentSponser.car.GetComponent<AirAndDriftTimer>().UIPopup = worldSpacePopup;
+                currentSponser.car.GetComponent<CarCollision>().UIPopup = worldSpacePopup;
 
                 currentSponser.car.GetComponent<CarCollision>().nearMiss = nearMissTransform.gameObject.GetComponent<NearMiss>();
+                currentSponser.car.GetComponent<CarCollision>().airTest = airColliderTransform.gameObject.GetComponent<AirTest>();
+                currentSponser.car.GetComponent<CarCollision>().airTest.UIPopup = worldSpacePopup;
+                currentSponser.car.GetComponent<CarCollision>().nearMiss.UIPopup = worldSpacePopup;
 
                 break;
             }
@@ -207,7 +218,7 @@ public class GameDataManager : MonoBehaviour
     public void ApplyMultipliers()
     {
         var timers = currentSponser.car.GetComponent<AirAndDriftTimer>();
-        timers.sponserAirMultiplier = currentSponser.AirMultiplier;
+        // timers.sponserAirMultiplier = currentSponser.AirMultiplier;
         timers.sponserDriftMultiplier = currentSponser.DriftMultiplier;
         GameObject.FindGameObjectWithTag("Car").GetComponent<CarCollision>().sponserHitMultiplier = currentSponser.HitMultiplier;
 
@@ -225,35 +236,40 @@ public class GameDataManager : MonoBehaviour
         pauseWindow.SetActive(false);
         gameOverWindow.SetActive(false);
         tutorialHolder.SetActive(false);
+        leaderBoardHolder.SetActive(false);
     }
 
     public void Pause()
     {
-        if(gamePaused == true)
+        if(currentState == GameState.Playing)
         {
-            //is paused, unpasueing
-            Debug.Log("Unpausing");
-            Time.timeScale = 1f;
-            TurnOffAll();
-            if(currentState == GameState.Selecting)
+            if(gamePaused == true)
             {
-                carSelectionUI.SetActive(true);
+                //is paused, unpasueing
+                Debug.Log("Unpausing");
+                Time.timeScale = 1f;
+                TurnOffAll();
+                if(currentState == GameState.Selecting)
+                {
+                    carSelectionUI.SetActive(true);
+                }
+                else if(currentState == GameState.Playing)
+                {
+                    hudUI.SetActive(true);
+                }
+                gamePaused = false;
             }
-            else if(currentState == GameState.Playing)
+            else if(gamePaused == false)
             {
-                hudUI.SetActive(true);
+                //is unpaused, pausing
+                Debug.Log("pausing");
+                Time.timeScale = 0f;
+                TurnOffAll();
+                pauseWindow.SetActive(true);
+                gamePaused = true;
             }
-            gamePaused = false;
         }
-        else if(gamePaused == false)
-        {
-            //is unpaused, pausing
-            Debug.Log("pausing");
-            Time.timeScale = 0f;
-            TurnOffAll();
-            pauseWindow.SetActive(true);
-            gamePaused = true;
-        }
+        
         
     }
 
@@ -283,6 +299,14 @@ public class GameDataManager : MonoBehaviour
         {
             PlayerPrefs.SetInt("Tutorial", 0);
         }
+    }
+    public void OpenLeader()
+    {
+        currentState = GameState.ScoreBoard;
+        leaderBoardManager.playerRankText.text = $"Your Score: {GetComponent<Viewers>().maxViewerCount}";
+        TurnOffAll();
+        leaderBoardHolder.SetActive(true);
+        leaderBoardManager.OnPlayerLost();
     }
 
     private IEnumerator Honk()

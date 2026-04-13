@@ -6,6 +6,7 @@ public class Viewers : MonoBehaviour
 {
     public bool Testing = false;
     public int viewerCount = 50;
+    public int maxViewerCount;
     public float timeSinceLastTrick = 5f;
     public float maxTime = 60;
     public TextMeshProUGUI viewersText;
@@ -17,6 +18,7 @@ public class Viewers : MonoBehaviour
     void Start()
     {
         viewersText.text = "Viewers: " + viewerCount.ToString();
+        maxViewerCount = viewerCount;
         TimeText.text = "Time Until Viewers Get Bored: \n" + timeSinceLastTrick.ToString("F2");
         timeSinceLastTrick = maxTime/2;
     }
@@ -71,6 +73,10 @@ public class Viewers : MonoBehaviour
             timeSinceLastTrick += timeToAdd;
         }
         TimeText.text = "Time Until Viewers Get Bored: \n" + timeSinceLastTrick.ToString("F2");
+        if(viewerCount > maxViewerCount)
+        {
+            maxViewerCount = viewerCount;
+        }
         
     }
     private IEnumerator LooseViewers()
@@ -78,7 +84,7 @@ public class Viewers : MonoBehaviour
         while(isLoosingViewers)
         {
             yield return new WaitForSecondsRealtime(1);
-            viewerCount -= 1;
+            viewerCount -= Random.Range(0, 10);
             viewersText.text = "Viewers: " + viewerCount.ToString();
         }
     }
