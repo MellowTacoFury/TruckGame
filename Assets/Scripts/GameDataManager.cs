@@ -13,7 +13,7 @@ public class GameDataManager : MonoBehaviour
         None, Selecting, Playing, GO, Tutorial, ScoreBoard
     }
     public GameState currentState;
-    private bool gamePaused = false;
+    public bool gamePaused = false;
     [Header("Sponsers")]
     [Tooltip("1 is default for ints")]
     public List<Sponser> sponsers;
@@ -239,12 +239,31 @@ public class GameDataManager : MonoBehaviour
         leaderBoardHolder.SetActive(false);
     }
 
+
+    public void QuickEnd()
+    {
+        currentState = GameState.GO;
+        TurnOffAll();
+        gameOverWindow.SetActive(true);
+        Time.timeScale = 0;
+        currentSponser.car.GetComponent<GetCarEmitter>().driveEmitter.Stop();
+
+
+        //if played with a tutorial, turn it off
+        if(doingTutorial == true)
+        {
+            PlayerPrefs.SetInt("Tutorial", 0);
+        }
+    }
+
+
     public void Pause()
     {
         if(currentState == GameState.Playing)
         {
             if(gamePaused == true)
             {
+                gamePaused = false;
                 //is paused, unpasueing
                 Debug.Log("Unpausing");
                 Time.timeScale = 1f;
@@ -257,16 +276,16 @@ public class GameDataManager : MonoBehaviour
                 {
                     hudUI.SetActive(true);
                 }
-                gamePaused = false;
             }
             else if(gamePaused == false)
             {
+                gamePaused = true;
+                currentSponser.car.GetComponent<GetCarEmitter>().driveEmitter.Stop();
                 //is unpaused, pausing
                 Debug.Log("pausing");
                 Time.timeScale = 0f;
                 TurnOffAll();
                 pauseWindow.SetActive(true);
-                gamePaused = true;
             }
         }
         
@@ -292,6 +311,7 @@ public class GameDataManager : MonoBehaviour
         TurnOffAll();
         gameOverWindow.SetActive(true);
         Time.timeScale = 0;
+        currentSponser.car.GetComponent<GetCarEmitter>().driveEmitter.Stop();
 
 
         //if played with a tutorial, turn it off

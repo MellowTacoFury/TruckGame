@@ -19,9 +19,15 @@ public class PlayerCarInput : MonoBehaviour
         }
         else
         {
-            car.accelerationInput = Input.GetAxis("Vertical");
-            car.steerInput = Input.GetAxis("Horizontal");
-            if(transform.Find("/GameManager").GetComponent<GameDataManager>().currentState != GameDataManager.GameState.Playing)
+        car.accelerationInput = Input.GetAxis("Vertical");
+        car.steerInput = Input.GetAxis("Horizontal");
+            if(transform.Find("/GameManager").GetComponent<GameDataManager>().currentState != GameDataManager.GameState.Playing
+            || transform.Find("/GameManager").GetComponent<GameDataManager>().gamePaused == true)
+            {
+                //end or paused
+                GetComponent<GetCarEmitter>().driveEmitter.Stop();
+            }
+            else
             {
                 //playing
                 if(car.accelerationInput <= 0)
@@ -33,11 +39,7 @@ public class PlayerCarInput : MonoBehaviour
                 {
                     GetComponent<GetCarEmitter>().driveEmitter.Play();
                 }
-            }
-            else
-            {
-                //end
-                GetComponent<GetCarEmitter>().driveEmitter.Stop();
+                
             }
             
             

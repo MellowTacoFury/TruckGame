@@ -9,14 +9,25 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject settingsPanel;
     [SerializeField] GameObject creditsPanel;
     [SerializeField] Settings settings;
+    [SerializeField] string[] levelNames;
     private StudioEventEmitter emitter;
-
 
     void Start()
     {
+        if(AudioManager.instance.isPlayingBGMusic == true)
+        {
+            //dont play 
+            Debug.Log("Playing twice");
+        }
+        else
+        {
+            Debug.Log("Playing once");
+            emitter = AudioManager.instance.InitializeEventEmitter(FMODEvents.instance.backgroundMusic, gameObject);
+            AudioManager.instance.isPlayingBGMusic = true;
+            emitter.Play();
+        }
+        
         Time.timeScale = 1;
-        emitter = AudioManager.instance.InitializeEventEmitter(FMODEvents.instance.backgroundMusic, this.gameObject);
-        emitter.Play();
         settingsPanel.SetActive(false);
         creditsPanel.SetActive(false);
         settings.StartZoom();
@@ -38,9 +49,9 @@ public class MainMenu : MonoBehaviour
     {
         creditsPanel.SetActive(false);
     }
-    public void Play(string levelName)
+    public void Play()
     {
-        SceneManager.LoadScene(levelName);
+        SceneManager.LoadScene(Random.Range(0, levelNames.Length));
     }
     public void Quit()
     {

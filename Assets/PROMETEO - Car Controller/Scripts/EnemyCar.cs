@@ -5,45 +5,47 @@ public class AICarController : MonoBehaviour
 {
     public Transform player;
 
-    [Header("Vision")]
-    public float viewDistance = 40f;
-    public float viewAngle = 90f;
+    [Header("Driving")]
+    public float accel = 1f;
+    public float steerStrength = 1f;
+
+    [Header("Aggression Tuning")]
+    public float baseAggression = 0.7f; //Somewhere between 0.3 and 0.7 is usually good
+    public float turnDamping = 0.7f;
+
+    [Header("Raycast Avoidance")]
+    public int rayCount = 5;
+    public float raySpread = 60f;
+    public float rayDistance = 12f;
+    public float avoidWeight = 2f;
     public LayerMask obstacleMask;
 
-    [Header("Combat")]
-    public float ramDistance = 12f;
-    public float aggressiveSteerMultiplier = 1.8f;
+    [Header("Forward Stuck Detection")]
+    public float stuckCheckDistance = 3f;
+    public float stuckTimeThreshold = 1.2f;
 
-    [Header("Wander")]
-    public float wanderRadius = 60f;
-    public float wanderReach = 10f;
-    public float wanderSpeed = 0.5f;
+    [Header("Low Speed Stuck")]
+    public float minMoveSpeed = 0.5f;
+    public float noMoveTime = 1.0f;
 
     private PrometeoCarController car;
     private Rigidbody rb;
-    private Rigidbody playerRb;
 
-    private Vector3 wanderTarget;
-    private bool canSeePlayer;
-
-    //STUCK SYSTEM (IMPROVED)
+    // Reverse system
     private float stuckTimer = 0f;
     private bool isReversing = false;
     private float reverseTimer = 0f;
-    private Vector3 lastMoveDir;
 
+    // Panic system
+    private float noMoveTimer = 0f;
+    private bool isPanicking = false;
+    private float panicTimer = 0f;
     public bool playing = false;
     public void StartMatch()
     {
         car = GetComponent<PrometeoCarController>();
         rb = GetComponent<Rigidbody>();
-
-        //FORCE AI MODE
         car.useAI = true;
-
-        if (player != null)
-            playerRb = player.GetComponent<Rigidbody>();
-        PickNewWanderPoint();
     }
 
     void Update()
@@ -55,151 +57,174 @@ public class AICarController : MonoBehaviour
         else
         {
         if (player == null) return;
+        }
+        // PRIORITY SYSTEM
+        if (isReversing)
+            return;
 
-        //STUCK DETECTION (SMART)
-        float speed = rb.linearVelocity.magnitude;
-
-        float forwardDot = 0f;
-
-        if (stuckTimer > 1f)
+        if (isPanicking)
         {
-            isReversing = true;
-            reverseTimer = Random.Range(2.5f, 3.5f);
-            lastMoveDir = rb.linearVelocity;
+            PanicMove();
+            return;
         }
 
+        HandleForwardStuck();
+        HandleLowSpeedStuck();
 
-        if (speed < 0.1f){
-            //Debug.Log("stuck timer = " + stuckTimer);
-            forwardDot = Vector3.Dot(transform.forward, rb.linearVelocity.normalized);
-            stuckTimer += Time.deltaTime;
-        }
-        else if(speed > 0.1f)
-        {
-            stuckTimer = 0f;
-        }
-
-        //VISION
-        canSeePlayer = CheckVision();
-
-        if (canSeePlayer)
-            Chase();
-        else
-            Wander();
-        }
+        Drive();
     }
 
     void FixedUpdate()
     {
-        //HANDLE REVERSING (HARD OVERRIDE)
         if (isReversing)
+            Reverse();
+    }
+
+    // =========================
+    // MAIN DRIVE
+    // =========================
+    void Drive()
+    {
+        Vector3 targetDir = (player.position - transform.position).normalized;
+        Vector3 localTarget = transform.InverseTransformDirection(targetDir);
+
+        float steerToPlayer = Mathf.Clamp(localTarget.x * turnDamping, -1f, 1f);
+        float avoidSteer = GetRaycastAvoidance();
+
+        float finalSteer = steerToPlayer + avoidSteer;
+        finalSteer = Mathf.Clamp(finalSteer, -1f, 1f);
+
+        float finalAccel = accel * baseAggression;
+
+        if (Mathf.Abs(finalSteer) > 0.5f || Mathf.Abs(avoidSteer) > 0.2f)
+            finalAccel *= 0.6f;
+
+        car.steerInput = finalSteer * steerStrength;
+        car.accelerationInput = finalAccel;
+    }
+
+    // =========================
+    // MULTI-RAY AVOIDANCE
+    // =========================
+    float GetRaycastAvoidance()
+    {
+        float steer = 0f;
+        Vector3 origin = transform.position + Vector3.up * 0.5f;
+
+        for (int i = 0; i < rayCount; i++)
         {
-            //Debug.Log("I Reverse Now");
-            ReverseOut();
-            return;
+            float t = (float)i / (rayCount - 1);
+            float angle = Mathf.Lerp(-raySpread / 2f, raySpread / 2f, t);
+            Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
+
+            if (Physics.Raycast(origin, dir, out RaycastHit hit, rayDistance, obstacleMask))
+            {
+                if (hit.transform == player)
+                    continue;
+
+                float side = Vector3.Dot(transform.right, dir);
+                float strength = 1f - (hit.distance / rayDistance);
+
+                steer -= side * strength * avoidWeight;
+
+                Debug.DrawRay(origin, dir * hit.distance, Color.red);
+            }
+            else
+            {
+                Debug.DrawRay(origin, dir * rayDistance, Color.green);
+            }
         }
+
+        return steer;
     }
 
-    //PLAYER DETECTION
-    bool CheckVision()
+    // =========================
+    // FORWARD STUCK → REVERSE
+    // =========================
+    void HandleForwardStuck()
     {
-        Vector3 dir = player.position - transform.position;
-        float dist = dir.magnitude;
+        Vector3 origin = transform.position + Vector3.up * 0.5f;
 
-        if (dist > viewDistance) return false;
-
-        float angle = Vector3.Angle(transform.forward, dir);
-        if (angle > viewAngle * 0.5f) return false;
-
-        if (Physics.Raycast(transform.position + Vector3.up, dir.normalized, dist, obstacleMask))
-            return false;
-
-        return true;
-    }
-
-    //CHASE + RAM
-    void Chase()
-    {
-        Vector3 target = player.position;
-
-        if (playerRb != null)
-            target += playerRb.linearVelocity * 0.5f;
-
-        DriveTowards(target, 1f, true);
-    }
-
-    //WANDER
-    void Wander()
-    {
-        float dist = Vector3.Distance(transform.position, wanderTarget);
-
-        if (dist < wanderReach)
-            PickNewWanderPoint();
-
-        DriveTowards(wanderTarget, wanderSpeed, false);
-    }
-
-    public void PickNewWanderPoint()
-    {
-        Vector2 random = Random.insideUnitCircle * wanderRadius;
-        wanderTarget = new Vector3(random.x, transform.position.y, random.y);
-    }
-
-    //DRIVING LOGIC
-    void DriveTowards(Vector3 target, float accelMultiplier, bool aggressive)
-    {
-        Vector3 localTarget = transform.InverseTransformPoint(target);
-
-        float steer = Mathf.Clamp(localTarget.x / localTarget.magnitude, -1f, 1f);
-        float accel = accelMultiplier;
-
-        float distance = Vector3.Distance(transform.position, target);
-
-        if (aggressive && distance < ramDistance)
+        if (Physics.Raycast(origin, transform.forward, out RaycastHit hit, stuckCheckDistance, obstacleMask))
         {
-            steer *= aggressiveSteerMultiplier;
-            accel = 1f;
+            if (hit.transform != player)
+            {
+                stuckTimer += Time.deltaTime;
+
+                if (stuckTimer > stuckTimeThreshold)
+                {
+                    isReversing = true;
+                    reverseTimer = Random.Range(2f, 3f);
+                }
+            }
         }
         else
         {
-            if (Mathf.Abs(steer) > 0.5f)
-                accel *= 0.6f;
+            stuckTimer = 0f;
         }
-
-        // Small randomness
-        steer += Random.Range(-0.03f, 0.03f);
-
-        car.steerInput = steer;
-        car.accelerationInput = accel;
     }
 
-    //ESCAPE WALLS (FIXED)
-    void ReverseOut()
+    void Reverse()
     {
         reverseTimer -= Time.deltaTime;
-        // FULL reverse
+
         car.accelerationInput = -1f;
+        car.steerInput = Random.Range(-1f, 1f);
 
-        //STEER AWAY FROM STUCK DIRECTION
-        float steerDir = Vector3.Dot(transform.right, lastMoveDir) > 0 ? -1f : 1f;
-        car.steerInput = steerDir;
-        car.Jump(0.5f);
-
-        //reduce sticking/sliding
         rb.linearVelocity *= 0.9f;
-
-        // stop Prometeo braking logic
-        CancelInvoke("DecelerateCar");
 
         if (reverseTimer <= 0f)
         {
             isReversing = false;
             stuckTimer = 0f;
         }
-
     }
 
-    // 💥 RAM FORCE
+    // =========================
+    // LOW SPEED STUCK → PANIC
+    // =========================
+    void HandleLowSpeedStuck()
+    {
+        float speed = rb.linearVelocity.magnitude;
+
+        if (speed < minMoveSpeed)
+        {
+            noMoveTimer += Time.deltaTime;
+
+            if (noMoveTimer > noMoveTime)
+            {
+                isPanicking = true;
+                panicTimer = Random.Range(1f, 2f);
+            }
+        }
+        else
+        {
+            noMoveTimer = 0f;
+        }
+    }
+
+    void PanicMove()
+    {
+        panicTimer -= Time.deltaTime;
+
+        car.steerInput = Random.Range(-1f, 1f);
+        car.accelerationInput = Mathf.Sin(Time.time * 8f);
+
+        if (Random.value < 0.1f)
+            car.Jump(0.5f);
+
+        rb.linearVelocity *= 0.95f;
+
+        if (panicTimer <= 0f)
+        {
+            isPanicking = false;
+            noMoveTimer = 0f;
+        }
+    }
+
+    // =========================
+    // RAM PLAYER
+    // =========================
     void OnCollisionEnter(Collision collision)
     {
         if (collision.transform == player)
@@ -207,8 +232,7 @@ public class AICarController : MonoBehaviour
             Rigidbody otherRb = collision.rigidbody;
             if (otherRb != null)
             {
-                Vector3 force = transform.forward * 5000f;
-                otherRb.AddForce(force);
+                otherRb.AddForce(transform.forward * 5000f);
             }
         }
     }

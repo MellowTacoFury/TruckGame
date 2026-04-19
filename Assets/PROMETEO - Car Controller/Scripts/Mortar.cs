@@ -27,29 +27,29 @@ public class Mortar : MonoBehaviour
         }
         else
         {
-            if (Time.time > nextFireTime)
+        if (Time.time > nextFireTime)
+        {
+            StartCoroutine(MuzzleFlash());
+            // Select a random prefab from the array
+            int randomIndex = Random.Range(0, weaponPrefabs.Length);
+            GameObject prefabToShoot = weaponPrefabs[randomIndex];
+
+            // Instantiate at the firing point's position with current rotation
+            GameObject newBullet = Instantiate(prefabToShoot, firepoint.transform.position, firepoint.transform.rotation);
+               
+
+            // Apply velocity to move the bullet
+            Rigidbody rb = newBullet.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                StartCoroutine(MuzzleFlash());
-                // Select a random prefab from the array
-                int randomIndex = Random.Range(0, weaponPrefabs.Length);
-                GameObject prefabToShoot = weaponPrefabs[randomIndex];
-
-                // Instantiate at the firing point's position with current rotation
-                GameObject newBullet = Instantiate(prefabToShoot, firepoint.transform.position, firepoint.transform.rotation);
-                
-
-                // Apply velocity to move the bullet
-                Rigidbody rb = newBullet.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    rb.linearVelocity = firepoint.transform.forward * 35f;
-                }
-
-
-                nextFireTime = Time.time + fireRate;
+                rb.linearVelocity = firepoint.transform.forward * 35f;
             }
+
+
+            nextFireTime = Time.time + fireRate;
         }
-        
+    }
+
     }
 
     IEnumerator MuzzleFlash()

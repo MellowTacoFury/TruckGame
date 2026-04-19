@@ -33,10 +33,11 @@ public class Viewers : MonoBehaviour
 
     private void Update()
     {
-        if(Testing == true)
+        if(Testing == true || GetComponent<GameDataManager>().gamePaused == true)
         {
             return;
         }
+        
         if(GetComponent<GameDataManager>().currentState == GameDataManager.GameState.Playing)
         {
             if(viewerCount <= 0 && GetComponent<GameDataManager>().currentState != GameDataManager.GameState.GO)
@@ -49,6 +50,7 @@ public class Viewers : MonoBehaviour
 
             if(timeSinceLastTrick > 0)
             {
+                
                 timeSinceLastTrick -= Time.deltaTime;
                 StopCoroutine(LooseViewers());
                 isLoosingViewers = false;
