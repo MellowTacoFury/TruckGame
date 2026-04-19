@@ -36,7 +36,7 @@ public class AirTest : MonoBehaviour
         {
             isInAir = false;
             int amount = (int)Mathf.Ceil(timer);
-            GameObject.Find("GameManager").GetComponent<Viewers>().DoTrick(amount*sponserAirMultiplier, amount);
+            GameObject.Find("GameManager").GetComponent<Viewers>().DoTrick(amount*sponserAirMultiplier, amount*5);
             Debug.Log($"Air {amount*sponserAirMultiplier}");
             timer = 0;
             var g = Instantiate(UIPopup, transform.position + Vector3.up, Quaternion.identity);

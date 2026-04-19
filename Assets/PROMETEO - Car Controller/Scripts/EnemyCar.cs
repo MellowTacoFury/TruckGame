@@ -26,7 +26,7 @@ public class AICarController : MonoBehaviour
     private Vector3 wanderTarget;
     private bool canSeePlayer;
 
-    // 🧠 STUCK SYSTEM (IMPROVED)
+    //STUCK SYSTEM (IMPROVED)
     private float stuckTimer = 0f;
     private bool isReversing = false;
     private float reverseTimer = 0f;
@@ -38,7 +38,7 @@ public class AICarController : MonoBehaviour
         car = GetComponent<PrometeoCarController>();
         rb = GetComponent<Rigidbody>();
 
-        // 🔒 FORCE AI MODE
+        //FORCE AI MODE
         car.useAI = true;
 
         if (player != null)
@@ -54,39 +54,32 @@ public class AICarController : MonoBehaviour
         }
         else
         {
-            if (player == null) return;
+        if (player == null) return;
 
-        // 🚧 STUCK DETECTION (SMART)
+        //STUCK DETECTION (SMART)
         float speed = rb.linearVelocity.magnitude;
 
         float forwardDot = 0f;
-        if (speed > 0.1f)
-            forwardDot = Vector3.Dot(transform.forward, rb.linearVelocity.normalized);
 
-        if ((speed < 2f || forwardDot < 0.2f) && car.accelerationInput > 0.5f)
+        if (stuckTimer > 1f)
         {
+            isReversing = true;
+            reverseTimer = Random.Range(2.5f, 3.5f);
+            lastMoveDir = rb.linearVelocity;
+        }
+
+
+        if (speed < 0.1f){
+            //Debug.Log("stuck timer = " + stuckTimer);
+            forwardDot = Vector3.Dot(transform.forward, rb.linearVelocity.normalized);
             stuckTimer += Time.deltaTime;
         }
-        else
+        else if(speed > 0.1f)
         {
             stuckTimer = 0f;
         }
 
-        if (stuckTimer > 1.2f && !isReversing)
-        {
-            isReversing = true;
-            reverseTimer = Random.Range(1.5f, 2.5f);
-            lastMoveDir = rb.linearVelocity;
-        }
-
-        // 🔙 HANDLE REVERSING (HARD OVERRIDE)
-        if (isReversing)
-        {
-            ReverseOut();
-            return;
-        }
-
-        // 👀 VISION
+        //VISION
         canSeePlayer = CheckVision();
 
         if (canSeePlayer)
@@ -94,10 +87,20 @@ public class AICarController : MonoBehaviour
         else
             Wander();
         }
-        
     }
 
-    // 👀 PLAYER DETECTION
+    void FixedUpdate()
+    {
+        //HANDLE REVERSING (HARD OVERRIDE)
+        if (isReversing)
+        {
+            //Debug.Log("I Reverse Now");
+            ReverseOut();
+            return;
+        }
+    }
+
+    //PLAYER DETECTION
     bool CheckVision()
     {
         Vector3 dir = player.position - transform.position;
@@ -114,7 +117,7 @@ public class AICarController : MonoBehaviour
         return true;
     }
 
-    // 🚗 CHASE + RAM
+    //CHASE + RAM
     void Chase()
     {
         Vector3 target = player.position;
@@ -125,7 +128,7 @@ public class AICarController : MonoBehaviour
         DriveTowards(target, 1f, true);
     }
 
-    // 🧭 WANDER
+    //WANDER
     void Wander()
     {
         float dist = Vector3.Distance(transform.position, wanderTarget);
@@ -136,13 +139,13 @@ public class AICarController : MonoBehaviour
         DriveTowards(wanderTarget, wanderSpeed, false);
     }
 
-    void PickNewWanderPoint()
+    public void PickNewWanderPoint()
     {
         Vector2 random = Random.insideUnitCircle * wanderRadius;
         wanderTarget = new Vector3(random.x, transform.position.y, random.y);
     }
 
-    // 🚙 DRIVING LOGIC
+    //DRIVING LOGIC
     void DriveTowards(Vector3 target, float accelMultiplier, bool aggressive)
     {
         Vector3 localTarget = transform.InverseTransformPoint(target);
@@ -170,18 +173,19 @@ public class AICarController : MonoBehaviour
         car.accelerationInput = accel;
     }
 
-    // 🔙 ESCAPE WALLS (FIXED)
+    //ESCAPE WALLS (FIXED)
     void ReverseOut()
     {
         reverseTimer -= Time.deltaTime;
         // FULL reverse
         car.accelerationInput = -1f;
 
-        // 🧠 STEER AWAY FROM STUCK DIRECTION
+        //STEER AWAY FROM STUCK DIRECTION
         float steerDir = Vector3.Dot(transform.right, lastMoveDir) > 0 ? -1f : 1f;
         car.steerInput = steerDir;
+        car.Jump(0.5f);
 
-        // 🔥 reduce sticking/sliding
+        //reduce sticking/sliding
         rb.linearVelocity *= 0.9f;
 
         // stop Prometeo braking logic

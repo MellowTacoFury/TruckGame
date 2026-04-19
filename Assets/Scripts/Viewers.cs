@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class Viewers : MonoBehaviour
 {
@@ -9,18 +10,25 @@ public class Viewers : MonoBehaviour
     public int maxViewerCount;
     public float timeSinceLastTrick = 5f;
     public float maxTime = 60;
-    public TextMeshProUGUI viewersText;
-    public TextMeshProUGUI TimeText;
+    [Header("UI")]
+    public Slider viewerSlider;
+    public TextMeshProUGUI viewerText;
+    public Image emojiImage;
+    public Sprite[] emojis;
+    private bool ableToChange = false;
+    private bool alreadyZero = false;
+    
     private bool isLoosingViewers;
     /*
     level timer - gas gage?
     */
     void Start()
     {
-        viewersText.text = "Viewers: " + viewerCount.ToString();
         maxViewerCount = viewerCount;
-        TimeText.text = "Time Until Viewers Get Bored: \n" + timeSinceLastTrick.ToString("F2");
-        timeSinceLastTrick = maxTime/2;
+        timeSinceLastTrick = maxTime;
+        viewerSlider.maxValue = maxViewerCount;
+        viewerSlider.value = viewerCount;
+        viewerText.text = $"Viewers: {viewerCount}";
     }
 
     private void Update()
@@ -42,14 +50,13 @@ public class Viewers : MonoBehaviour
             if(timeSinceLastTrick > 0)
             {
                 timeSinceLastTrick -= Time.deltaTime;
-                TimeText.text = "Time Until Viewers Get Bored: \n" + timeSinceLastTrick.ToString("F2");
                 StopCoroutine(LooseViewers());
                 isLoosingViewers = false;
+                alreadyZero = false;
             }
             else
             {
                 timeSinceLastTrick = 0;
-                TimeText.text = "Time Until Viewers Get Bored: \n" + timeSinceLastTrick.ToString("F2");
                 //start the courutine
                 if(isLoosingViewers == false)
                 {
@@ -62,7 +69,8 @@ public class Viewers : MonoBehaviour
     public void DoTrick(int viewersToAdd, float timeToAdd)
     {
         viewerCount += viewersToAdd;
-        viewersText.text = "Viewers: " + viewerCount.ToString();
+        viewerSlider.value = viewerCount;
+        viewerText.text = $"Viewers: {viewerCount}";
 
         if(timeSinceLastTrick+timeToAdd >= maxTime)
         {
@@ -72,11 +80,12 @@ public class Viewers : MonoBehaviour
         {
             timeSinceLastTrick += timeToAdd;
         }
-        TimeText.text = "Time Until Viewers Get Bored: \n" + timeSinceLastTrick.ToString("F2");
         if(viewerCount > maxViewerCount)
         {
             maxViewerCount = viewerCount;
+            viewerSlider.maxValue = maxViewerCount;
         }
+        ImageChanger(true);
         
     }
     private IEnumerator LooseViewers()
@@ -85,7 +94,43 @@ public class Viewers : MonoBehaviour
         {
             yield return new WaitForSecondsRealtime(1);
             viewerCount -= Random.Range(0, 10);
-            viewersText.text = "Viewers: " + viewerCount.ToString();
+            viewerSlider.value = viewerCount;
+            viewerText.text = $"Viewers: {viewerCount}";
+            ImageChanger();
+        }
+    }
+    private IEnumerator HappyImageTimer()
+    {
+        yield return new WaitForSecondsRealtime(1);
+        ableToChange = true;
+        ImageChanger();
+    }
+
+    private void ImageChanger(bool gotPoints = false)
+    {
+        if(gotPoints == true)
+        {
+            //set to hell yeah happy, for a few seconds
+            emojiImage.sprite = emojis[0];
+            ableToChange = false;
+            StartCoroutine(HappyImageTimer());
+            //start timer for it
+        }
+        else if(ableToChange == true && timeSinceLastTrick > 0 && !(viewerCount <= (maxViewerCount/2)))
+        {
+            //set image to happy
+            emojiImage.sprite = emojis[1];
+        }
+        else if(timeSinceLastTrick <= 0 && alreadyZero == false)
+        {
+            //set image to meh
+            emojiImage.sprite = emojis[2];
+            alreadyZero = true;
+        }
+        else if(viewerCount <= (maxViewerCount/3))
+        {
+            //set image to danger
+            emojiImage.sprite = emojis[3];
         }
     }
 }

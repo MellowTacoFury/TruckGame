@@ -70,7 +70,7 @@ public class AirAndDriftTimer : MonoBehaviour
     {
         if(driftTime != 0)
         {
-            viewers.DoTrick((int)Mathf.Ceil(driftTime) * sponserDriftMultiplier, (int)driftTime);
+            viewers.DoTrick((int)Mathf.Ceil(driftTime) * sponserDriftMultiplier, (int)driftTime*5);
            
             var g = Instantiate(UIPopup, transform.position + Vector3.up, Quaternion.identity);
             g.GetComponent<UIPopup>().DoText((int)Mathf.Ceil(driftTime)*sponserDriftMultiplier);

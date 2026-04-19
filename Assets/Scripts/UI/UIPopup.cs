@@ -15,7 +15,7 @@ public class UIPopup : MonoBehaviour
     }
     public void DoText(int amount)
     {
-        viewerText.text = $"+{amount} Viewers!";
+        viewerText.text = $"+{amount}";
         image.enabled = true;
         image.gameObject.SetActive(true);
         Destroy(this.gameObject, 2);

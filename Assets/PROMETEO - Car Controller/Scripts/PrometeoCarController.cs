@@ -23,6 +23,11 @@ public class PrometeoCarController : MonoBehaviour
       [Space(20)]
       public bool useAI = false;
       [Range(20, 190)]
+      [Header("Jump")]
+      public float jumpForce = 8000f;
+      public float jumpCooldown = 1.2f;
+      private float lastJumpTime = -999f;
+      [Range(20, 190)]
       public int maxSpeed = 140; //The maximum speed that the car can reach in km/h.
       [Range(10, 120)]
       public int maxReverseSpeed = 65; //The maximum speed that the car can reach while going on reverse in km/h.
@@ -371,7 +376,15 @@ public class PrometeoCarController : MonoBehaviour
         if(Input.GetKey(KeyCode.D)){
             TurnRight();
         }
-    }
+        if (Input.GetKey(KeyCode.Space))
+        {
+            Jump(0.5f);
+        }
+        if(Input.GetKey(KeyCode.F)){
+          CancelInvoke("DecelerateCar");
+          deceleratingCar = false;
+          Handbrake();
+        }
         if(useAI)
         {
         if(Mathf.Abs(accelerationInput) < 0.1f)
@@ -416,7 +429,7 @@ public class PrometeoCarController : MonoBehaviour
       // We call the method AnimateWheelMeshes() in order to match the wheel collider movements with the 3D meshes of the wheels.
       AnimateWheelMeshes();
 
-    }
+    }}
 
     // This method converts the car speed data from float to string, and then set the text of the UI carSpeedText with this value.
     public void CarSpeedUI(){
@@ -816,6 +829,39 @@ public class PrometeoCarController : MonoBehaviour
 
         driftingAxis = 0f;
       }
+    }
+    public void Jump(float multiplier = 1f)
+    {
+        // Cooldown
+        if (Time.time - lastJumpTime < jumpCooldown)
+            return;
+
+        // Prevent mid-air jumping
+        if (!IsGrounded())
+            return;
+
+        lastJumpTime = Time.time;
+
+        // Reset vertical velocity for consistent jump
+        carRigidbody.linearVelocity = new Vector3(
+            carRigidbody.linearVelocity.x,
+            0f,
+            carRigidbody.linearVelocity.z
+        );
+
+        // Up + slight forward boost
+        Vector3 jumpDir = transform.up + transform.forward * 0.5f;
+
+        carRigidbody.AddForce(jumpDir * jumpForce * multiplier, ForceMode.Impulse);
+
+        Debug.Log("Jump triggered");
+    }
+    bool IsGrounded()
+    {
+        return frontLeftCollider.isGrounded ||
+               frontRightCollider.isGrounded ||
+               rearLeftCollider.isGrounded ||
+               rearRightCollider.isGrounded;
     }
 
 }

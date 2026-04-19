@@ -19,9 +19,9 @@ public class LeaderboardManager : MonoBehaviour
     }
 
     public char[] currentLetter;
-    public TextMeshProUGUI[] rankTexts;   // 10 items
-    public TextMeshProUGUI[] nameTexts;   // 10 items
-    public TextMeshProUGUI[] scoreTexts;  // 10 items
+    public TextMeshProUGUI[] rankTexts;   // 5 items
+    public TextMeshProUGUI[] nameTexts;   // 5 items
+    public TextMeshProUGUI[] scoreTexts;  // 5 items
     public TextMeshProUGUI playerRankText; 
     public TextMeshProUGUI[] entryLetters; // 3 items for name entry
     public GameObject letterIndicator;     // e.g. arrow under current letter
@@ -163,7 +163,7 @@ public class LeaderboardManager : MonoBehaviour
     }
 
     void UpdateLeaderboardUI(ScoreEntry entry) {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             if (i < leaderboard.Count) {
                 rankTexts[i].text = (i+1).ToString() + ".";
                 nameTexts[i].text = leaderboard[i].name;
@@ -181,7 +181,7 @@ public class LeaderboardManager : MonoBehaviour
         ScoreEntry playerEntry = leaderboard.Find(e => e.score == currentScore && e.name.Length == 3);
         if (entry != null) {
             int rank = leaderboard.IndexOf(playerEntry) + 1;
-            if (rank > 10) {
+            if (rank > 5) {
                 playerRankText.text = $"Your Score: {entry.score}  (Rank {rank})";
                 playerRankText.gameObject.SetActive(true);
             } else {

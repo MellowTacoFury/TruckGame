@@ -77,7 +77,7 @@ public class Settings : MonoBehaviour
     {
         AudioManager.instance.UpdateMasterBus(volumeMaster.value);
         PlayerPrefs.SetFloat("MasterV", volumeMaster.value);
-    }
+        }
     public void ChangeMusicVolume()
     {
         AudioManager.instance.UpdateMusicBus(volumeMusic.value);

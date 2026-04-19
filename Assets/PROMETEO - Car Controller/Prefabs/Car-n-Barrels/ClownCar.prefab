@@ -323,7 +323,6 @@ GameObject:
   - component: {fileID: 4047802481524498195}
   - component: {fileID: 8562069299165575378}
   - component: {fileID: 3642312847445727161}
-  - component: {fileID: 5390151071806739572}
   m_Layer: 0
   m_Name: ClownCar
   m_TagString: Car
@@ -439,18 +438,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a15601f58d137043bc76afcefd7408f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCarInput
---- !u!114 &5390151071806739572
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4488004948594717843}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a15601f58d137043bc76afcefd7408f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerCar
 --- !u!1 &4590753154123150215
 GameObject:
   m_ObjectHideFlags: 0

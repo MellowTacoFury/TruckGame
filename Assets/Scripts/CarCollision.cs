@@ -32,7 +32,7 @@ public class CarCollision : MonoBehaviour
         if(other.CompareTag("Car") || other.CompareTag("Enemy") && hitInThisInstance == false)
         {
             hitInThisInstance = true;
-            viewers.DoTrick(5,5);
+            viewers.DoTrick(5,15);
             var g = Instantiate(UIPopup, transform.position + Vector3.up, Quaternion.identity);
             g.GetComponent<UIPopup>().DoText(5);
             //if hittable - objects and cars, not ground
