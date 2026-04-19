@@ -55,7 +55,6 @@ public class MainMenu : MonoBehaviour
     }
     public void Quit()
     {
-        emitter.Stop();
         Application.Quit();
     }
 
