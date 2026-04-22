@@ -291,7 +291,7 @@ MonoBehaviour:
       Data2: 1193087666
       Data3: -2091678032
       Data4: -934028260
-    Path: event:/ButtonClick
+    Path: event:/Other/ButtonClick
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0

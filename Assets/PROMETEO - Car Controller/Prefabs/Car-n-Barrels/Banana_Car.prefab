@@ -416,6 +416,7 @@ GameObject:
   - component: {fileID: 7508435549988746175}
   - component: {fileID: 2389941031457581675}
   - component: {fileID: 6087676394471696342}
+  - component: {fileID: 250035875515170026}
   m_Layer: 0
   m_Name: Camera - For car selection
   m_TagString: Untagged
@@ -533,6 +534,37 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &250035875515170026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3354058873507612103}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
 --- !u!1 &3778742836351743737
 GameObject:
   m_ObjectHideFlags: 0
@@ -852,6 +884,7 @@ GameObject:
   - component: {fileID: 2827687259963537054}
   - component: {fileID: 8337591780492375044}
   - component: {fileID: 1060372348701398662}
+  - component: {fileID: 2262052823365025047}
   m_Layer: 0
   m_Name: Banana_Car
   m_TagString: Car
@@ -1050,7 +1083,7 @@ MonoBehaviour:
       Data2: 1073907770
       Data3: -286118247
       Data4: 434510992
-    Path: event:/Crash
+    Path: event:/Other/Crash
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -1112,7 +1145,7 @@ MonoBehaviour:
       Data2: 1325659764
       Data3: 413510578
       Data4: 2097337853
-    Path: event:/Driving
+    Path: event:/Other/Driving
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -1143,7 +1176,7 @@ MonoBehaviour:
       Data2: 1101423610
       Data3: -1753386112
       Data4: -1417092475
-    Path: event:/Drifting
+    Path: event:/Other/Drifting
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -1155,6 +1188,35 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 1
   OverrideMaxDistance: 20
+--- !u!114 &2262052823365025047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5426961884405595930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 597eefaa58a9bba4899cfba40245e958, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AICarController
+  player: {fileID: 0}
+  accel: 1
+  steerStrength: 1
+  baseAggression: 0.3
+  turnDamping: 0.7
+  rayCount: 5
+  raySpread: 60
+  rayDistance: 12
+  avoidWeight: 2
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  stuckCheckDistance: 3
+  stuckTimeThreshold: 1.2
+  minMoveSpeed: 0.5
+  noMoveTime: 1
+  playing: 0
 --- !u!1 &5667478506696118274
 GameObject:
   m_ObjectHideFlags: 0

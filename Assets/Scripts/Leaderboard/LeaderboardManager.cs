@@ -35,6 +35,7 @@ public class LeaderboardManager : MonoBehaviour
     public GameObject playAgainButton;
     public GameObject QuitButton;
     public GameObject EnterButton;
+    public Viewers v;
     private bool entering = false;
     
     void OnEnable()
@@ -53,7 +54,7 @@ public class LeaderboardManager : MonoBehaviour
         if (!nameEntryPanel.activeSelf) return; // only while entering name
         
         bool moved = false;
-        currentScore = this.transform.Find("/GameManager").GetComponent<Viewers>().maxViewerCount;
+        currentScore = v.maxViewerCount;
         
        
         if (navigateAction.triggered)

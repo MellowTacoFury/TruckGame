@@ -236,4 +236,10 @@ public class AICarController : MonoBehaviour
             }
         }
     }
+    public void Stop()
+    {
+        playing = false;
+        car.accelerationInput = 0;
+        car.steerInput = 0;
+    }
 }

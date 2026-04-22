@@ -1,32 +1,15 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using FMODUnity;
-
-[RequireComponent(typeof(StudioEventEmitter))]
 public class MainMenu : MonoBehaviour
 {
 
     [SerializeField] GameObject settingsPanel;
     [SerializeField] GameObject creditsPanel;
     [SerializeField] Settings settings;
-    [SerializeField] string[] levelNames;
-    private StudioEventEmitter emitter;
+    // [SerializeField] string[] levelNames;
 
     void Start()
     {
-        if(AudioManager.instance.isPlayingBGMusic == true)
-        {
-            //dont play 
-            Debug.Log("Playing twice");
-        }
-        else
-        {
-            Debug.Log("Playing once");
-            emitter = AudioManager.instance.InitializeEventEmitter(FMODEvents.instance.backgroundMusic, gameObject);
-            AudioManager.instance.isPlayingBGMusic = true;
-            emitter.Play();
-        }
-        
         Time.timeScale = 1;
         settingsPanel.SetActive(false);
         creditsPanel.SetActive(false);
@@ -49,9 +32,9 @@ public class MainMenu : MonoBehaviour
     {
         creditsPanel.SetActive(false);
     }
-    public void Play()
+    public void Play(string levelNames)
     {
-        SceneManager.LoadScene(Random.Range(0, levelNames.Length));
+        SceneManager.LoadScene(levelNames);
     }
     public void Quit()
     {

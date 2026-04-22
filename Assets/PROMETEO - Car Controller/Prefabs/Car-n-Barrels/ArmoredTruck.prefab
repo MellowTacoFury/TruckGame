@@ -180,6 +180,7 @@ GameObject:
   - component: {fileID: 7912236402644557006}
   - component: {fileID: 4129316115786880325}
   - component: {fileID: 1495771025272019176}
+  - component: {fileID: 460597147272423141}
   m_Layer: 0
   m_Name: ArmoredTruck
   m_TagString: Car
@@ -378,7 +379,7 @@ MonoBehaviour:
       Data2: 1073907770
       Data3: -286118247
       Data4: 434510992
-    Path: event:/Crash
+    Path: event:/Other/Crash
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -440,7 +441,7 @@ MonoBehaviour:
       Data2: 1101423610
       Data3: -1753386112
       Data4: -1417092475
-    Path: event:/Drifting
+    Path: event:/Other/Drifting
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -471,7 +472,7 @@ MonoBehaviour:
       Data2: 1325659764
       Data3: 413510578
       Data4: 2097337853
-    Path: event:/Driving
+    Path: event:/Other/Driving
   Event: 
   EventPlayTrigger: 0
   EventStopTrigger: 0
@@ -483,6 +484,35 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 1
   OverrideMaxDistance: 20
+--- !u!114 &460597147272423141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1777765875961969654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 597eefaa58a9bba4899cfba40245e958, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AICarController
+  player: {fileID: 0}
+  accel: 1
+  steerStrength: 1
+  baseAggression: 0.5
+  turnDamping: 0.7
+  rayCount: 5
+  raySpread: 60
+  rayDistance: 12
+  avoidWeight: 2
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  stuckCheckDistance: 3
+  stuckTimeThreshold: 1.2
+  minMoveSpeed: 0.5
+  noMoveTime: 1
+  playing: 0
 --- !u!1 &4216938267908895634
 GameObject:
   m_ObjectHideFlags: 0
@@ -779,6 +809,7 @@ GameObject:
   - component: {fileID: 7303325840466414131}
   - component: {fileID: 5736922609379002094}
   - component: {fileID: 836238347737126410}
+  - component: {fileID: 5424183119241575937}
   m_Layer: 0
   m_Name: Camera - For car selection
   m_TagString: Untagged
@@ -896,6 +927,37 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &5424183119241575937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6419092727337757513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: FMODUnity::FMODUnity.StudioEventEmitter
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
+  Event: 
+  EventPlayTrigger: 0
+  EventStopTrigger: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  NonRigidbodyVelocity: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: -1
+  OverrideMaxDistance: -1
 --- !u!1 &6529890772161301317
 GameObject:
   m_ObjectHideFlags: 0

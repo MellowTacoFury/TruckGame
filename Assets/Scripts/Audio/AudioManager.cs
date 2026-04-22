@@ -24,7 +24,7 @@ public class AudioManager : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
         eventInstances = new List<EventInstance>();
         eventEmitters = new List<StudioEventEmitter>();
         

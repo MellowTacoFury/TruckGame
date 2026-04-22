@@ -21,8 +21,8 @@ public class PlayerCarInput : MonoBehaviour
         {
         car.accelerationInput = Input.GetAxis("Vertical");
         car.steerInput = Input.GetAxis("Horizontal");
-            if(transform.Find("/GameManager").GetComponent<GameDataManager>().currentState != GameDataManager.GameState.Playing
-            || transform.Find("/GameManager").GetComponent<GameDataManager>().gamePaused == true)
+            if(transform.Find("/AllPrefabPieces/GameManager").GetComponent<GameDataManager>().currentState != GameDataManager.GameState.Playing
+            || transform.Find("/AllPrefabPieces/GameManager").GetComponent<GameDataManager>().gamePaused == true)
             {
                 //end or paused
                 GetComponent<GetCarEmitter>().driveEmitter.Stop();
@@ -60,4 +60,13 @@ public class PlayerCarInput : MonoBehaviour
             }
         }
     }
+
+
+    public void Stop()
+    {
+        playing = false;
+        car.accelerationInput = 0;
+        car.steerInput = 0;
+    }
+
 }

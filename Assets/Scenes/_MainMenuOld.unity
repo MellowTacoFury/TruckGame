@@ -847,49 +847,49 @@ MonoBehaviour:
       Data2: 1335195379
       Data3: 1333312919
       Data4: 1239052931
-    Path: event:/Explosion
+    Path: event:/Other/Explosion
   <backgroundMusic>k__BackingField:
     Guid:
       Data1: -252018881
       Data2: 1328395671
       Data3: -1181352788
       Data4: 1466767818
-    Path: event:/MainBGMusic
+    Path: event:/Other/MainBGMusic
   <carCrash>k__BackingField:
     Guid:
       Data1: 1275359471
       Data2: 1073907770
       Data3: -286118247
       Data4: 434510992
-    Path: event:/Crash
+    Path: event:/Other/Crash
   <buttonClick>k__BackingField:
     Guid:
       Data1: -1164918851
       Data2: 1193087666
       Data3: -2091678032
       Data4: -934028260
-    Path: event:/ButtonClick
+    Path: event:/Other/ButtonClick
   <horns>k__BackingField:
     Guid:
       Data1: 1912203719
       Data2: 1288224884
       Data3: -1331369047
       Data4: 1092935997
-    Path: event:/BackGround Horns
+    Path: event:/Other/BackGround Horns
   <drifting>k__BackingField:
     Guid:
       Data1: -198237909
       Data2: 1101423610
       Data3: -1753386112
       Data4: -1417092475
-    Path: event:/Drifting
+    Path: event:/Other/Drifting
   <driving>k__BackingField:
     Guid:
       Data1: -1554225530
       Data2: 1325659764
       Data3: 413510578
       Data4: 2097337853
-    Path: event:/Driving
+    Path: event:/Other/Driving
 --- !u!4 &513789568
 Transform:
   m_ObjectHideFlags: 0
@@ -1385,6 +1385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c808b19012ced44428c4b3626707e47a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
+  isPlayingBGMusic: 0
 --- !u!4 &784297247
 Transform:
   m_ObjectHideFlags: 0
@@ -1805,6 +1806,7 @@ MonoBehaviour:
   settingsPanel: {fileID: 1240521825}
   creditsPanel: {fileID: 650554954}
   settings: {fileID: 1910737757}
+  levelNames: []
 --- !u!114 &1479055790
 MonoBehaviour:
   m_ObjectHideFlags: 0

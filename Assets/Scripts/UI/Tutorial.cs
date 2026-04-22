@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using FMODUnity;
 
+[RequireComponent(typeof(StudioEventEmitter))]
 public class Tutorial : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI tutorialText;
@@ -9,10 +11,13 @@ public class Tutorial : MonoBehaviour
     [SerializeField] string buttonText;
     private int tutorialLevel = 0;
     private bool done = false;
+    private StudioEventEmitter emitter;
     void Start()
     {
         tutorialLevel = 0;
         done = false;
+        emitter = AudioManager.instance.InitializeEventEmitter(FMODEvents.instance.EndOfTutorial, gameObject);
+        emitter.Stop();
     }
 
     // Update is called once per frame
@@ -35,7 +40,8 @@ public class Tutorial : MonoBehaviour
         {
             //end tutorial
             done = true;
-            GameObject.Find("/GameManager").GetComponent<GameDataManager>().StartAfterTutorial();
+            GameObject.Find("/AllPrefabPieces/GameManager").GetComponent<GameDataManager>().StartAfterTutorial();
+            emitter.Play();
         }
         else
         {

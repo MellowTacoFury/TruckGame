@@ -10,6 +10,7 @@ public class CarCollision : MonoBehaviour
     public AirTest airTest;
     public GameObject UIPopup;
     private bool hitInThisInstance;
+    private StudioEventEmitter emitter;
     void Start()
     {
         viewers = GameObject.Find("GameManager").GetComponent<Viewers>();
@@ -46,6 +47,9 @@ public class CarCollision : MonoBehaviour
         {
             nearMiss.somethingHitCar = true;
             GetComponent<GetCarEmitter>().crashEmitter.Play();
+            emitter = AudioManager.instance.InitializeEventEmitter(FMODEvents.instance.CrashVoice, gameObject);
+            if(emitter.IsPlaying() == false)
+                emitter.Play();
         }
     }
     void OnTriggerExit(Collider other)

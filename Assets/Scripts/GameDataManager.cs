@@ -32,7 +32,10 @@ public class GameDataManager : MonoBehaviour
     public LeaderboardManager leaderBoardManager;
     public GameObject worldSpacePopup;
     private bool doingTutorial = false;
-    private StudioEventEmitter emitter;
+    [SerializeField] private StudioEventEmitter emitter;
+    [SerializeField] private StudioEventEmitter sponserPlayer;
+    [SerializeField] private StudioEventEmitter endPlayer;
+    [SerializeField] private StudioEventEmitter hornPlayer;
     private int howOften = 10;
     //choose sponser
 
@@ -51,6 +54,7 @@ public class GameDataManager : MonoBehaviour
         {
             doingTutorial = true;
         }
+        emitter = GetComponent<StudioEventEmitter>();
     }
 
 
@@ -118,6 +122,7 @@ public class GameDataManager : MonoBehaviour
 
     public void StartGame()
     {
+        
         //false, no tutorial
         if(doingTutorial == false)
         {
@@ -147,8 +152,6 @@ public class GameDataManager : MonoBehaviour
             gun.GetComponent<Mortar>().playing = true;
         }
         
-        emitter = AudioManager.instance.InitializeEventEmitter(FMODEvents.instance.horns, gameObject);
-        emitter.Stop();
         StartCoroutine(Honk());
     }
     public void StartAfterTutorial()
@@ -196,8 +199,14 @@ public class GameDataManager : MonoBehaviour
 
                 break;
             }
+            // sponser.camera.SetActive(false);
+            // sponser.car.transform.Find("Camera - For car selection").gameObject.SetActive(false);
+            
         }
+        
         if(!doingTutorial)SetEnemyCars();
+        PlaySound(currentSponser.ChooseLine, true);
+        
     }
     private void SetEnemyCars()
     {
@@ -205,7 +214,7 @@ public class GameDataManager : MonoBehaviour
         {
             if(sponser.isPlayerSponser == false)
             {
-                sponser.car.GetComponent<AICarController>().player = GameObject.FindGameObjectWithTag("Car").gameObject.transform;
+                sponser.car.GetComponent<AICarController>().player = currentSponser.car.gameObject.transform;
                 sponser.car.GetComponent<AICarController>().StartMatch();
                 sponser.car.GetComponent<AICarController>().playing = true;
                 sponser.car.GetComponent<PrometeoCarController>().enabled = true;
@@ -224,7 +233,22 @@ public class GameDataManager : MonoBehaviour
 
     }
 
-
+    public void StopForEnd()
+    {
+        foreach (var sponser in sponsers)
+        {
+            if(sponser.isPlayerSponser == true)
+            {
+                //player car
+                sponser.car.GetComponent<PlayerCarInput>().Stop();
+            }
+            else
+            {
+                //non player cars
+                sponser.car.GetComponent<AICarController>().Stop();
+            }
+        }
+    }
 
 
     //UI
@@ -307,18 +331,7 @@ public class GameDataManager : MonoBehaviour
 
     public void GameDone()
     {
-        currentState = GameState.GO;
-        TurnOffAll();
-        gameOverWindow.SetActive(true);
-        Time.timeScale = 0;
-        currentSponser.car.GetComponent<GetCarEmitter>().driveEmitter.Stop();
-
-
-        //if played with a tutorial, turn it off
-        if(doingTutorial == true)
-        {
-            PlayerPrefs.SetInt("Tutorial", 0);
-        }
+        StartCoroutine(End());
     }
     public void OpenLeader()
     {
@@ -332,8 +345,96 @@ public class GameDataManager : MonoBehaviour
     private IEnumerator Honk()
     {
         yield return new WaitForSeconds(UnityEngine.Random.Range(3, howOften));
-        emitter.Play();
+        int t = UnityEngine.Random.Range(0,11);
+        if(t < 7)
+        {
+            //play honk
+            if(hornPlayer.IsPlaying() == false)
+            {
+                hornPlayer.Play();
+            }
+            Debug.Log("Play horn");
+                
+        }
+        else if(t == 7)
+        {
+            //skip
+        }
+        else if(t > 7)
+        {
+            //9 or 10
+            //play sponser add
+            Debug.Log("Play spnsr");
+            if(sponserPlayer.IsPlaying() == false)
+            {
+                sponserPlayer.Play();
+            }
+                
+        }
         StartCoroutine(Honk());
+    }
+
+    private IEnumerator End()
+    {
+        currentState = GameState.GO;
+        TurnOffAll();
+        StopForEnd();
+        currentSponser.car.GetComponent<GetCarEmitter>().driveEmitter.Stop();
+        yield return new WaitForSecondsRealtime(.5f);
+        
+        emitter.Stop();
+        // PlaySound(FMODEvents.instance.GameOver,true, true);
+        endPlayer.Play();
+
+        yield return new WaitForSecondsRealtime(1f);
+        //Stop cars, timer, etc
+        //make explosion under car
+        currentSponser.car.transform.Find("BigExplosion").gameObject.SetActive(true);
+        yield return new WaitForSecondsRealtime(0.25f);
+        currentSponser.car.transform.Find("BigExplosion").GetComponent<ParticleSystem>().Play();
+        currentSponser.car.GetComponent<Rigidbody>().AddForce(Vector3.up*10000, ForceMode.Impulse);
+        yield return new WaitForSecondsRealtime(3f);
+        gameOverWindow.SetActive(true);
+        Time.timeScale = 0;
+
+        //if played with a tutorial, turn it off
+        if(doingTutorial == true)
+        {
+            PlayerPrefs.SetInt("Tutorial", 0);
+        }
+    }
+
+
+    public void PlaySound(EventReference eventReference, bool forceIt = false, bool go = false)
+    {
+        if(go == false)
+        {
+            if(emitter.IsPlaying() == false)
+            {
+                emitter = AudioManager.instance.InitializeEventEmitter(eventReference, gameObject);
+                emitter.Play();
+                Debug.Log(eventReference);
+            }
+
+            if(forceIt == true)
+            {
+                
+                emitter.Stop();
+                emitter = AudioManager.instance.InitializeEventEmitter(eventReference, gameObject);
+                emitter.Play();
+                Debug.Log(eventReference);
+            }
+        }
+        else
+        {
+            //END OF GAME
+            emitter.Stop();
+            emitter = AudioManager.instance.InitializeEventEmitter(eventReference, gameObject);
+            emitter.Play();
+            Debug.Log(eventReference);
+        }
+        
+        
     }
 
 
@@ -348,6 +449,7 @@ public struct Sponser
     public int DriftMultiplier;
     public int HitMultiplier;
     public int AirMultiplier;
+    [field: SerializeField] public EventReference ChooseLine;
     //car game object to be player - remove ai and put player car scripts
     [Tooltip("The car and the scene")]
     public GameObject? car;

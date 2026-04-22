@@ -12,6 +12,18 @@ public class FMODEvents : MonoBehaviour
     [field: SerializeField] public EventReference horns { get; private set; }
     [field: SerializeField] public EventReference drifting { get; private set; }
     [field: SerializeField] public EventReference driving { get; private set; }
+    [Header("Voice Lines")]
+    [field: SerializeField] public EventReference EndOfTutorial { get; private set; }
+    [field: SerializeField] public EventReference GameOver { get; private set; }
+    [field: SerializeField] public EventReference RandomSponser { get; private set; }
+    [field: SerializeField] public EventReference CrashVoice { get; private set; }
+    [field: SerializeField] public EventReference NearMiss { get; private set; }
+    [field: SerializeField] public EventReference Low { get; private set; }
+    [field: SerializeField] public EventReference High { get; private set; }
+    [field: SerializeField] public EventReference Moderate { get; private set; }
+    [field: SerializeField] public EventReference Intro { get; private set; }
+    [field: SerializeField] public EventReference Viewers68 { get; private set; }
+    [field: SerializeField] public EventReference BusJump { get; private set; }
 
     public static FMODEvents instance { get; private set; }
 
@@ -24,6 +36,6 @@ public class FMODEvents : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        // DontDestroyOnLoad(gameObject);
     }
 }

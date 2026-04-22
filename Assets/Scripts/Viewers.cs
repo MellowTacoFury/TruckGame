@@ -2,7 +2,9 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using FMODUnity;
 
+[RequireComponent(typeof(StudioEventEmitter))]
 public class Viewers : MonoBehaviour
 {
     public bool Testing = false;
@@ -17,6 +19,10 @@ public class Viewers : MonoBehaviour
     public Sprite[] emojis;
     private bool ableToChange = false;
     private bool alreadyZero = false;
+    private bool AlreadyPlayedHigh = false;
+    private bool AlreadyPlayedLow = false;
+    private bool AlreadyPlayedMod = false;
+    private bool AlreadyPlayed69 = false;
     
     private bool isLoosingViewers;
     /*
@@ -48,7 +54,7 @@ public class Viewers : MonoBehaviour
             
             //---------------
 
-            if(timeSinceLastTrick > 0)
+            if(timeSinceLastTrick >= 0)
             {
                 
                 timeSinceLastTrick -= Time.deltaTime;
@@ -128,11 +134,34 @@ public class Viewers : MonoBehaviour
             //set image to meh
             emojiImage.sprite = emojis[2];
             alreadyZero = true;
+            if(AlreadyPlayedMod == false && GetComponent<GameDataManager>().currentState == GameDataManager.GameState.Playing)
+            {
+                AlreadyPlayedMod = true;
+                GetComponent<GameDataManager>().PlaySound(FMODEvents.instance.Moderate);
+            }
         }
         else if(viewerCount <= (maxViewerCount/3))
         {
             //set image to danger
             emojiImage.sprite = emojis[3];
+            if(AlreadyPlayedLow == false && GetComponent<GameDataManager>().currentState == GameDataManager.GameState.Playing)
+            {
+                AlreadyPlayedLow = true;
+                GetComponent<GameDataManager>().PlaySound(FMODEvents.instance.Low);
+            }
+        }
+
+
+        //Check specific value
+        if(viewerCount == 69 && AlreadyPlayed69 == false && GetComponent<GameDataManager>().currentState == GameDataManager.GameState.Playing)
+        {
+            AlreadyPlayed69 = true;
+            GetComponent<GameDataManager>().PlaySound(FMODEvents.instance.Viewers68);
+        }
+        if(viewerCount > 100 && AlreadyPlayedHigh == false && GetComponent<GameDataManager>().currentState == GameDataManager.GameState.Playing)
+        {
+            AlreadyPlayedHigh = true;
+            GetComponent<GameDataManager>().PlaySound(FMODEvents.instance.High);
         }
     }
 }

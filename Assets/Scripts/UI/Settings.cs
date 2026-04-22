@@ -36,10 +36,10 @@ public class Settings : MonoBehaviour
     public void StartZoom()
     {
         //By itself, beacause the camera component is off at start
-        //15 - 60ish, 25
+        //55-70ish, 60
         if(PlayerPrefs.GetFloat("Zoom", -1) == -1)
         {
-            PlayerPrefs.SetFloat("Zoom", 25);
+            PlayerPrefs.SetFloat("Zoom", 60);
         }
         zoom.value = PlayerPrefs.GetFloat("Zoom");
         Camera.main.GetComponent<Camera>().fieldOfView = PlayerPrefs.GetFloat("Zoom");
